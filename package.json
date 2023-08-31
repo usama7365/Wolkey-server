@@ -2,9 +2,9 @@
 	"name": "auth_server",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "app.js",
 	"scripts": {
-		"server": "node index.js",
+		"server": "node app.js",
 		"client": "npm run dev --prefix client-vue",
 		"dev": "concurrently \"npm run server\" \"npm run client\""
 	},
