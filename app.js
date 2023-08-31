@@ -17,10 +17,7 @@ const protectedRoute = require('./routes/Protect.routes');
 const app = express();
 app.use(express.json());
 connectDB();
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true, 
-}));
+app.use(cors());
 
 
 app.use(morgan("dev"));
@@ -62,16 +59,16 @@ app.use('/verify', VerifyAccount )
 app.use('/', protectedRoute);
 
 
-if (process.env.NODE_ENV === "PRODUCTION") {
-  app.use(express.static("client-react/build"));
-  app.use(express.static(path.join(__dirname, "./uploads")));
+// if (process.env.NODE_ENV === "PRODUCTION") {
+//   app.use(express.static("client-react/build"));
+//   app.use(express.static(path.join(__dirname, "./uploads")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "client-react", "build", "index.html")
-    );
-  });
-}
+//   app.get("*", (req, res) => {
+//     res.sendFile(
+//       path.resolve(__dirname, "client-react", "build", "index.html")
+//     );
+//   });
+// }
 
 const PORT = process.env.PORT || 5000;
 
