@@ -37,7 +37,7 @@ exports.PostUserSchema = async (req, res) => {
             to: email,
             subject: 'Account Verification',
             text: `Click the following link to verify your account: 
-            http://localhost:3000/verify/${verificationToken}`,
+            https://wolkeyclientside.onrender.com/verify/${verificationToken}`,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

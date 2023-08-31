@@ -24,7 +24,7 @@ exports.forgotPassword = async (req, res) => {
       },
     });
 
-    const resetLink = `http://localhost:3000/reset/${resetToken}`;
+    const resetLink = `https://wolkeyclientside.onrender.com/reset/${resetToken}`;
     const mailOptions = {
       from: 'usamaaamirsohail@gmail.com',
       to: user.email,
