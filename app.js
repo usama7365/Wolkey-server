@@ -53,11 +53,6 @@ app.use(expressFileUpload());
 
 // Use Routes
 
-app.get('/api/data', (req, res) => {
-  const data = { message: `Hello from the backend in ${req.userLanguage}!` };
-  res.json(data);
-});
-
 app.use("/", SignupRouter);
 app.use("/login", LoginRouter);
 app.use('/auth', authRouter);
