@@ -62,22 +62,6 @@ app.use('/verify', VerifyAccount )
 app.use('/', protectedRoute);
 
 
-
-
-app.get("/", (req, res) => {
-  console.log("Api");
-  res.status(404).json({
-    msg: "Node Api",
-  });
-});
-
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    msg: "Page not found",
-  });
-});
-
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static("client-react/build"));
   app.use(express.static(path.join(__dirname, "./uploads")));
