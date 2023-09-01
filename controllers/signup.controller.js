@@ -36,6 +36,8 @@ exports.PostUserSchema = async (req, res) => {
             from: 'usamaaamirsohail@gmail.com',
             to: email,
             subject: 'Account Verification',
+            // text: `Click the following link to verify your account: 
+            // https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
             text: `Click the following link to verify your account: 
             https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
         };

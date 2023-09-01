@@ -24,7 +24,10 @@ exports.forgotPassword = async (req, res) => {
       },
     });
 
+    // const resetLink = `https://main.ddbwdjepg8yrm.amplifyapp.com/reset/${resetToken}`;
     const resetLink = `https://main.ddbwdjepg8yrm.amplifyapp.com/reset/${resetToken}`;
+
+    
     const mailOptions = {
       from: 'usamaaamirsohail@gmail.com',
       to: user.email,
