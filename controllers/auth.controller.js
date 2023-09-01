@@ -24,7 +24,7 @@ exports.forgotPassword = async (req, res) => {
       },
     });
 
-    const resetLink = `https://wolkeyclientside.onrender.com/reset/${resetToken}`;
+    const resetLink = `https://main.dgjitom33iyu8.amplifyapp.com/reset/${resetToken}`;
     const mailOptions = {
       from: 'usamaaamirsohail@gmail.com',
       to: user.email,
