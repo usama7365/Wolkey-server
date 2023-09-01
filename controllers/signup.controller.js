@@ -37,7 +37,7 @@ exports.PostUserSchema = async (req, res) => {
             to: email,
             subject: 'Account Verification',
             text: `Click the following link to verify your account: 
-            https://main.dgjitom33iyu8.amplifyapp.com/verify/${verificationToken}`,
+            https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

@@ -15,7 +15,7 @@ exports.forgotPassword = async (req, res) => {
     user.resetToken = resetToken;
     user.resetTokenExpiration = Date.now() + 3600000; 
     await user.save();
-
+  
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -24,7 +24,7 @@ exports.forgotPassword = async (req, res) => {
       },
     });
 
-    const resetLink = `https://main.dgjitom33iyu8.amplifyapp.com/reset/${resetToken}`;
+    const resetLink = `https://main.ddbwdjepg8yrm.amplifyapp.com/reset/${resetToken}`;
     const mailOptions = {
       from: 'usamaaamirsohail@gmail.com',
       to: user.email,
