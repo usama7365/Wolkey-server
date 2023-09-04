@@ -11,7 +11,7 @@ router.get('/dashboard', verifyToken, DashboardController);
 router.post('/create-profile', verifyToken, createProfile);
 router.post('/view-profile' ,verifyToken, getProfileById);
 
-// router.get('/cities', verifyToken, getAllCities);
+router.get('/cities', verifyToken, getAllCities);
 
 
 // router.get('/view-all', verifyToken, viewOtherProfiles);  
