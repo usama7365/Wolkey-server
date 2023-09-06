@@ -1,4 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+// const pricingSchema = new mongoose.Schema({
+//   day :String,
+//   time: String,
+//   cost: Number,
+// });
 
 const profileSchema = new mongoose.Schema({
   name: {
@@ -17,8 +23,6 @@ const profileSchema = new mongoose.Schema({
   serviceNames:[String],
   Experience: String,
   TeachingStyle: String,
-
-  personalDetails: {
     gender: String,
     age: Number,
     city: String,
@@ -28,13 +32,20 @@ const profileSchema = new mongoose.Schema({
     specialityDegree: String,
     Nationality: String,
     education: String,
+    
+  selectedFileNames: [
+    {
+      data: Buffer,
+      contentType: String,
+    },
+  ],
+
+  selectedVideoFile: {
+    data: Buffer,
+    contentType: String,
   },
-  selectedFileNames: [String],
-  selectedVideoFile: String,
-}, {
-  timestamps: true, 
 });
 
-const Profile = mongoose.model('Profile', profileSchema);
+const Profile = mongoose.model("Profile", profileSchema);
 
 module.exports = Profile;

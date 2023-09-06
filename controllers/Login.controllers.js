@@ -32,7 +32,7 @@ exports.PostLoginSchema = async (req, res) => {
         token
         
       });
-      console.log(res, "response")
+      // console.log(res, "response")
     } catch (error) {
       console.error("Login Error:", error);
       res.status(500).json({ error: "An error occurred while processing your request" });
