@@ -12,13 +12,7 @@ const profileSchema = new mongoose.Schema({
     required: true,
   },
   title: String,
-  availabilityDays: String,
-  availabilityMins: String,
-  availabilityStatus: String,
   aboutUs: String,
-  day :String,  
-  time: String,
-  cost: Number,
   subjectName: [String],
   serviceNames:[String],
   Experience: String,
@@ -32,6 +26,15 @@ const profileSchema = new mongoose.Schema({
     specialityDegree: String,
     Nationality: String,
     education: String,
+    prices:[],
+    availabilityDays: {
+      type: String, 
+    },
+  
+    availabilityMins: {
+      type: String,
+    },
+    selectedTimes:Array,
     
   selectedFileNames: [
     {

@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
     // console.log("Secret Key:", process.env.JWT_SECRET);
 
     req.user = decoded; // Attach the entire decoded payload to req.user
-    console.log("Decoded token:", decoded); // Log the decoded token for debugging
+    // console.log("Decoded token:", decoded); // Log the decoded token for debugging
 
     next();
   } catch (error) {
