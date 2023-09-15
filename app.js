@@ -3,22 +3,22 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const path = require("path");
-const expressFileUpload = require('express-fileupload');
 const connectDB = require("./config/db");
 const SignupRouter = require("./routes/signup.route");
 const LoginRouter = require("./routes/Login.route");
-const authRouter = require('./routes/auth.route');
-const resetRouter = require('./routes/reset.route');
+const authRouter = require("./routes/auth.route");
+const resetRouter = require("./routes/reset.route");
 const generateSecretKey = require("./generateSecretKey");
-const VerifyAccount = require('./routes/verify.account.route')
-const protectedRoute = require('./routes/Protect.routes'); 
-
+const VerifyAccount = require("./routes/verify.account.route");
+const protectedRoute = require("./routes/Protect.routes");
+const AgencyRouter = require("./routes/Agency.route");
+// const bodyParser = require("body-parser");
+const videoRoutes = require("./routes/video.routes");
 
 const app = express();
 app.use(express.json());
 connectDB();
 app.use(cors());
-
 
 app.use(morgan("dev"));
 
@@ -26,40 +26,43 @@ const jwtSecretKey = generateSecretKey();
 process.env.JWT_SECRET = jwtSecretKey;
 
 const languageMapping = {
-  'US': 'en',  
-  'GR': 'el',  
+  US: "en",
+  GR: "el",
 };
 
 app.use((req, res, next) => {
   try {
-    const userCountryCode = 'US'; 
-    const userLanguage = languageMapping[userCountryCode] || 'en'; 
+    const userCountryCode = "US";
+    const userLanguage = languageMapping[userCountryCode] || "en";
 
     req.userLanguage = userLanguage;
 
     next();
   } catch (error) {
-    console.error('Error detecting user language:', error);
+    console.error("Error detecting user language:", error);
     next();
   }
 });
-
-
-app.use(expressFileUpload());
-
 
 // Use Routes
 
 app.use("/", SignupRouter);
 app.use("/login", LoginRouter);
-app.use('/auth', authRouter);
-app.use('/reset', resetRouter);
-app.use('/verify', VerifyAccount )
+app.use("/auth", authRouter);
+app.use("/reset", resetRouter);
+app.use("/verify", VerifyAccount);
 
-app.use('/', protectedRoute);
+app.use("/", protectedRoute);
+
+app.use("/", AgencyRouter);
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+app.use(express.static("public"));
+app.use("/videos", videoRoutes);
+
 // Serve static files from the "public/uploads" directory
-app.use('/uploads', express.static('public/uploads'));
-
+// app.use('/uploads', express.static('public/uploads'));
 
 // if (process.env.NODE_ENV === "PRODUCTION") {
 //   app.use(express.static("client-react/build"));

@@ -1,10 +1,5 @@
 const mongoose = require("mongoose");
 
-// const pricingSchema = new mongoose.Schema({
-//   day :String,
-//   time: String,
-//   cost: Number,
-// });
 
 const profileSchema = new mongoose.Schema({
   name: {
@@ -36,18 +31,42 @@ const profileSchema = new mongoose.Schema({
     },
     selectedTimes:Array,
     
-  selectedFileNames: [
-    {
-      data: Buffer,
-      contentType: String,
-    },
-  ],
+    selectedImageFiles: [
+      {
+       type: String
 
-  selectedVideoFile: {
-    data: Buffer,
-    contentType: String,
-  },
-});
+      },
+    ],
+
+    selectedVideoFile: [
+      {
+        type: String
+
+      },
+    ],
+
+    ratings: [
+      {
+        stars: {
+          type: Number,
+          required: true,
+        },
+        review: String,
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+      },
+    ],
+
+},
+{
+  collection: "Profile",
+  timestamps: true,
+}
+
+
+);
 
 const Profile = mongoose.model("Profile", profileSchema);
 

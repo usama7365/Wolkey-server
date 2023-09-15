@@ -16,6 +16,7 @@ const UsersSchema = new mongoose.Schema(
       required: true,
     },
     verificationToken: String,
+    
     isVerified: {
       type: Boolean,
       default: false,
@@ -24,13 +25,17 @@ const UsersSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Profile', 
     },
-
+    AgencyProfile:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'agencyprofiles',
+    },
+    role: String,
     resetToken: String, 
     resetTokenExpiration: Date,
   },
   {
     collection: "Users",
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

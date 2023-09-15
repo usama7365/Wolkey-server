@@ -1,7 +1,5 @@
 const Profile = require("../models/profile.model");
 const User = require("../models/users.model");
-const City = require("../models/cities.model");
-
 
 exports.createProfile = async (req, res) => {
   try {
@@ -26,200 +24,102 @@ exports.createProfile = async (req, res) => {
       selectedTimes,
     } = req.body;
 
-    console.log(req.body, "req");
+    const videoFile = req.files.selectedVideoFile;
+    const imageFiles = req.files.selectedImageFiles; 
 
-    if (!name) {
-      return res.status(400).json({ error: "Name is required" });
-    }
-    // console.log("Request Body:", req.files);
-    const ima = req.files?.selectedFileNames || [];
-    const videoFile = req.files?.selectedVideoFile || null;
-    console.log("Image Files:", ima);
+    console.log("req.files:", req.files);
+
+
+    // return res.json({ files: req.files });
 
     const userId = req.user.userId;
-    console.log("User ID:", userId);
 
-    // Check if the user already has a profile
     const user = await User.findById(userId);
 
-    if (user.profileId) {
-      // User already has a profile, update the existing profile
-      const profile = await Profile.findById(user.profileId);
-      if (!profile) {
-        console.log("Profile not found for user:", userId);
-        return res.status(404).json({ error: "Profile not found" });
-      }
-
-      // Store the original profile data for comparison
-      const originalProfileData = {
-        name: profile.name,
-        title: profile.title,
-        city: profile.city,
-        gender: profile.gender,
-        dateOfBirth: profile.dateOfBirth,
-        aboutUs: profile.aboutUs,
-        phoneNumber: profile.phoneNumber,
-        age: profile.age,
-        subjectName: profile.subjectName,
-        serviceNames: profile.serviceNames,
-        Nationality: profile.Nationality,
-        education: profile.education,
-        specialityDegree: profile.specialityDegree,
-        Experience: profile.Experience,
-        TeachingStyle: profile.TeachingStyle,
-        languages: profile.languages,
-        prices: profile.prices,
-        selectedTimes: profile.selectedTimes,
-        selectedFileNames: profile.selectedFileNames,
-        selectedVideoFile: profile.selectedVideoFile,
-      };
-
-      profile.name = name;
-      profile.title = title;
-      profile.city = city;
-      profile.gender = gender;
-      profile.dateOfBirth = dateOfBirth;
-      profile.aboutUs = aboutUs;
-      profile.phoneNumber = phoneNumber;
-      profile.age = age;
-      profile.subjectName = subjectName;
-      profile.serviceNames = serviceNames;
-      profile.Nationality = Nationality;
-      profile.education = education;
-      profile.specialityDegree = specialityDegree;
-      profile.Experience = Experience;
-      profile.TeachingStyle = TeachingStyle;
-      profile.languages = languages;
-      (profile.prices = prices), (profile.selectedTimes = selectedTimes);
-
-      // Handle image and video updates if provided
-
-      if (Array.isArray(ima) && ima.length > 0) {
-        const imageArray = ima.map((file) => ({
-          data: file.data,
-          contentType: file.mimetype,
-        }));
-        profile.selectedFileNames = imageArray;
-      }
-
-      if (videoFile) {
-        profile.selectedVideoFile = {
-          data: videoFile.data,
-          contentType: videoFile.mimetype,
-        };
-      }
-
-      await profile.save();
-
-      // Check if the profile data has changed
-      const updatedProfileData = {
-        name: profile.name,
-        title: profile.title,
-        city: profile.city,
-        gender: profile.gender,
-        dateOfBirth: profile.dateOfBirth,
-        aboutUs: profile.aboutUs,
-        phoneNumber: profile.phoneNumber,
-        age: profile.age,
-        subjectName: profile.subjectName,
-        serviceNames: profile.serviceNames,
-        Nationality: profile.Nationality,
-        education: profile.education,
-        specialityDegree: profile.specialityDegree,
-        Experience: profile.Experience,
-        TeachingStyle: profile.TeachingStyle,
-        languages: profile.languages,
-        prices: profile.prices,
-        selectedTimes: profile.selectedTimes,
-        selectedFileNames: profile.selectedFileNames,
-        selectedVideoFile: profile.selectedVideoFile,
-      };
-
-      const hasProfileChanged =
-        JSON.stringify(originalProfileData) !==
-        JSON.stringify(updatedProfileData);
-
-      if (hasProfileChanged) {
-        // Profile data has changed, send "Profile updated successfully" message
-        await profile.save();
-
-        res
-          .status(200)
-          .json({
-            message: "Profile updated successfully",
-            profileId: profile,
-          });
-      } else {
-        // Profile data has not changed, send a different message if needed
-        res
-          .status(200)
-          .json({
-            message: "No changes made to the profile",
-            profileId: user.profileId,
-          });
-      }
-    } else {
-      // User does not have a profile, create a new profile
-      const imageFiles = req.files.selectedFileNames;
-      let imageArray = [];
-
-      if (Array.isArray(imageFiles) && imageFiles.length > 0) {
-        for (const file of imageFiles) {
-          imageArray.push({
-            data: file.data,
-            contentType: file.mimetype,
-          });
-        }
-      }
-
-      // Handle video upload and store it as binary data
-      const videoFile = req.files.selectedVideoFile;
-      let videoData = null;
-      if (videoFile) {
-        videoData = {
-          data: videoFile.data,
-          contentType: videoFile.mimetype,
-        };
-      }
-
-      // Create a new profile with the userId included
-      const profile = new Profile({
-        userId,
-        name,
-        title,
-        city,
-        gender,
-        dateOfBirth,
-        aboutUs,
-        phoneNumber,
-        age,
-        subjectName,
-        serviceNames,
-        Nationality,
-        education,
-        specialityDegree,
-        Experience,
-        TeachingStyle,
-        languages,
-        prices,
-        selectedTimes,
-        selectedFileNames: imageArray,
-        selectedVideoFile: videoData,
-      });
-
-      await profile.save();
-
-      // Assign the profileId to the user
-      user.profileId = profile._id;
-      await user.save();
-
-      res
-        .status(201)
-        .json({
-          message: "Profile created successfully",
-          profileId: profile._id,
-        });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    // if (!user.profileId) {
+    //   // New profile, require all fields to be filled
+    //   const requiredFields = [
+    //     name,
+    //     title,
+    //     city,
+    //     gender,
+    //     dateOfBirth,
+    //     aboutUs,
+    //     phoneNumber,
+    //     age,
+    //     subjectName,
+    //     serviceNames,
+    //     Nationality,
+    //     education,
+    //     specialityDegree,
+    //     Experience,
+    //     TeachingStyle,
+    //     languages,
+    //     prices,
+    //     selectedTimes,
+    //   ];
+
+    //   if (requiredFields.some((field) => !field)) {
+    //     return res.status(400).json({ error: "Please fill all fields" });
+    //   }
+    // }
+
+    const profile = user.profileId
+      ? await Profile.findById(user.profileId)
+      : new Profile({ userId });
+
+    profile.name = name || profile.name;
+    profile.title = title || profile.title;
+    profile.city = city || profile.city;
+    profile.gender = gender || profile.gender;
+    profile.dateOfBirth = dateOfBirth || profile.dateOfBirth;
+    profile.aboutUs = aboutUs || profile.aboutUs;
+    profile.phoneNumber = phoneNumber || profile.phoneNumber;
+    profile.age = age || profile.age;
+    profile.subjectName = subjectName || profile.subjectName;
+    profile.serviceNames = serviceNames || profile.serviceNames;
+    profile.Nationality = Nationality || profile.Nationality;
+    profile.education = education || profile.education;
+    profile.specialityDegree = specialityDegree || profile.specialityDegree;
+    profile.Experience = Experience || profile.Experience;
+    profile.TeachingStyle = TeachingStyle || profile.TeachingStyle;
+    profile.languages = languages || profile.languages;
+    profile.prices = prices || profile.prices;
+    profile.selectedTimes = selectedTimes || profile.selectedTimes;
+
+    if (videoFile && videoFile.length > 0) {
+   
+      const videoFilePaths = videoFile.map(
+        (file) => `/uploads/videos/${file.filename}`
+      );
+      console.log("video File Paths:", videoFilePaths);
+      profile.selectedVideoFile = videoFilePaths;
+    }
+
+    
+    if (imageFiles && imageFiles.length > 0) {
+   
+      const imageFilePaths = imageFiles.map(
+        (file) => `/uploads/images/${file.filename}`
+      );
+      console.log("Image File Paths:", imageFilePaths);
+      profile.selectedImageFiles = imageFilePaths;
+    }
+
+
+    await profile.save();
+
+    user.profileId = profile._id;
+    await user.save();
+
+    res.status(201).json({
+      message: "Profile created/updated successfully",
+      profileId: profile._id,
+    });
   } catch (error) {
     console.error("Error creating/updating profile:", error);
     res
@@ -251,350 +151,75 @@ exports.getProfileById = async (req, res) => {
   }
 };
 
-exports.getAllCities = async (req, res) => {
+exports.searchProfiles = async (req, res) => {
   try {
-    const citiesDocument = await City.findOne({}, "name");
-    if (citiesDocument) {
-      res.json(citiesDocument.name);
-    } else {
-      res.status(404).json({ message: "No cities found." });
+    const { keywords } = req.query;
+
+    const regexKeywords = new RegExp(keywords, "i");
+
+    const profiles = await Profile.find({
+      $or: [
+        { title: regexKeywords },
+        { aboutUs: regexKeywords },
+        { name: regexKeywords },
+      ],
+    });
+
+    if (!profiles || profiles.length === 0) {
+      return res.status(404).json({ error: "No matching profiles found" });
     }
+
+    res.status(200).json(profiles);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching cities." });
+    console.error("Error searching profiles:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while searching profiles" });
   }
 };
 
-// exports.viewOtherProfiles = async (req, res) => {
-//   try {
-//     const loggedInUserId = req.user.userId;
-
-//     // Find profiles that do not belong to the logged-in user
-//     const otherProfiles = await Profile.find({ _id: { $ne: loggedInUserId } });
-
-//     res.status(200).json(otherProfiles);
-//   } catch (error) {
-//     console.error('Error viewing other profiles:', error);
-//     res.status(500).json({ error: 'An error occurred while viewing other profiles' });
-//   }
-// };
-
-// exports.viewOtherProfiles = async (req, res) => {
-//   try {
-//     const loggedInUserId = req.user.userId;
-
-//     // Find profiles that do not belong to the logged-in user
-//     const otherProfiles = await Profile.find({ _id: { $ne: loggedInUserId } });
-
-//     res.status(200).json(otherProfiles);
-//   } catch (error) {
-//     console.error('Error viewing other profiles:', error);
-//     res.status(500).json({ error: 'An error occurred while viewing other profiles' });
-//   }
-// };
-
-// const Profile = require("../models/profile.model");
-// const User = require("../models/users.model");
-// const City = require("../models/cities.model");
-// const multer= require("multer")
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'public/uploads/images')
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//     cb(null, file.fieldname + '-' + uniqueSuffix)
-//   }
-// })
-
-// exports.upload = multer({ storage: storage })
-
-// // exports.createProfile2 = async (req, res) => {
-// //   console.log(req.file, req.body)
-// //   return res.json({
-// //     message : "image upload"
-// //   })
-// // }
-//   exports.createProfile = async (req, res) => {
-//   console.log(req.file, req.body)
-
-//   try {
-//     const {
-//       name,
-//       title,
-//       city,
-//       gender,
-//       dateOfBirth,
-//       aboutUs,
-//       phoneNumber,
-//       age,
-//       subjectName,
-//       serviceNames,
-//       Nationality,
-//       education,
-//       specialityDegree,
-//       Experience,
-//       TeachingStyle,
-//       languages,
-//       day,
-//       time,
-//       cost,
-//       availabilityDays,
-//       availabilityMins,
-//       availabilityStatus,
-//     } = req.body;
-
-//     if (!name) {
-//       return res.status(400).json({ error: 'Name is required' });
-//     }
-//     // console.log("Request Body:", req.files);
-//     const ima = req.files?.selectedFileNames || [];
-//     const videoFile = req.files?.selectedVideoFile || null;
-//     console.log("Image Files:", ima);
-
-//     const userId = req.user.userId;
-//     console.log("User ID:", userId);
-
-//     // Check if the user already has a profile
-//     const user = await User.findById(userId);
-
-//     if (user.profileId) {
-//       // User already has a profile, update the existing profile
-//       const profile = await Profile.findById(user.profileId);
-//       if (!profile) {
-//         console.log("Profile not found for user:", userId);
-//         return res.status(404).json({ error: "Profile not found" });
-//       }
-
-//       // Store the original profile data for comparison
-//       const originalProfileData = {
-//         name: profile.name,
-//         title: profile.title,
-//         city: profile.city,
-//         gender: profile.gender,
-//         dateOfBirth: profile.dateOfBirth,
-//         aboutUs: profile.aboutUs,
-//         phoneNumber: profile.phoneNumber,
-//         age: profile.age,
-//         subjectName: profile.subjectName,
-//         serviceNames: profile.serviceNames,
-//         Nationality: profile.Nationality,
-//         education: profile.education,
-//         specialityDegree: profile.specialityDegree,
-//         Experience: profile.Experience,
-//         TeachingStyle: profile.TeachingStyle,
-//         languages: profile.languages,
-//         day: profile.day,
-//         time: profile.time,
-//         cost: profile.cost,
-//         availabilityDays: profile.availabilityDays,
-//         availabilityMins: profile.availabilityMins,
-//         availabilityStatus: profile.availabilityStatus,
-//         selectedFileNames: profile.selectedFileNames,
-//         selectedVideoFile: profile.selectedVideoFile,
-//       };
-
-//       profile.name = name;
-//       profile.title = title;
-//       profile.city = city;
-//       profile.gender = gender;
-//       profile.dateOfBirth = dateOfBirth;
-//       profile.aboutUs = aboutUs;
-//       profile.phoneNumber = phoneNumber;
-//       profile.age = age;
-//       profile.subjectName = subjectName;
-//       profile.serviceNames = serviceNames;
-//       profile.Nationality = Nationality;
-//       profile.education = education;
-//       profile.specialityDegree = specialityDegree;
-//       profile.Experience = Experience;
-//       profile.TeachingStyle = TeachingStyle;
-//       profile.languages = languages;
-//       profile.day = day;
-//       profile.time = time;
-//       profile.cost = cost;
-//       profile.availabilityDays = availabilityDays;
-//       profile.availabilityMins = availabilityMins;
-//       profile.availabilityStatus = availabilityStatus;
+exports.getAllProfiles = async (req, res) => {
+  try {
+    const profiles = await Profile.find();
+    if (!profiles || profiles.length === 0) {
+      return res.status(404).json({ error: "No profiles found" });
+    }
+    res.status(200).json(profiles);
+  } catch (error) {
+    console.error("Error fetching profiles:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching profiles" });
+  }
+};
 
 
-//       console.log(originalProfileData, "image", req.files)
-//             // Handle image and video updates if provided
+exports.rateProfile = async (req, res) => {
+  try {
+    const { stars, review } = req.body;
+    const userId = req.user.userId;
+    const profileId = req.params.profileId;
 
-//             if (Array.isArray(ima) && ima.length > 0) {
-//               // Extract paths of uploaded images
-//               const imagePaths = ima.map((file) => `/uploads/images/${file.filename}`);
-//               // Save image paths to the profile document
-//               profile.selectedFileNames = imagePaths;
-//             }
-//             console.log('Uploaded Files:', req.files);
+    // Check if the user has already rated this profile
+    const existingRating = await Profile.findOne({
+      _id: profileId,
+      'ratings.userId': userId,
+    });
 
-//             if (videoFile) {
-//               profile.selectedVideoFile = {
-//                 data: videoFile.data,
-//                 contentType: videoFile.mimetype,
-//               };
-//             }
-          
-//             try {
-//               await profile.save();
-//             } catch (error) {
-//               console.error("Error saving profile to the database:", error);
-//             }
+    if (existingRating) {
+      return res.status(400).json({ error: 'You have already rated this profile' });
+    }
 
-//       // Check if the profile data has changed
-//       const updatedProfileData = {
-//         name: profile.name,
-//         title: profile.title,
-//         city: profile.city,
-//         gender: profile.gender,
-//         dateOfBirth: profile.dateOfBirth,
-//         aboutUs: profile.aboutUs,
-//         phoneNumber: profile.phoneNumber,
-//         age: profile.age,
-//         subjectName: profile.subjectName,
-//         serviceNames: profile.serviceNames,
-//         Nationality: profile.Nationality,
-//         education: profile.education,
-//         specialityDegree: profile.specialityDegree,
-//         Experience: profile.Experience,
-//         TeachingStyle: profile.TeachingStyle,
-//         languages: profile.languages,
-//         day: profile.day,
-//         time: profile.time,
-//         cost: profile.cost,
-//         availabilityDays: profile.availabilityDays,
-//         availabilityMins: profile.availabilityMins,
-//         availabilityStatus: profile.availabilityStatus,
-//         selectedFileNames: profile.selectedFileNames,
-//         selectedVideoFile: profile.selectedVideoFile,
-//       };
+    const rating = { stars, review, userId };
 
-//       const hasProfileChanged =
-//         JSON.stringify(originalProfileData) !==
-//         JSON.stringify(updatedProfileData);
+    await Profile.updateOne(
+      { _id: profileId },
+      { $push: { ratings: rating } }
+    );
 
-//       if (hasProfileChanged) {
-        
-//         try {
-//           await profile.save();
-//         } catch (error) {
-//           console.error("Error saving profile to the database:", error);
-//         }
-
-//         res
-//           .status(200)
-//           .json({ message: "Profile updated successfully", profileId: profile });
-//       } else {
-//         // Profile data has not changed, send a different message if needed
-//         res.status(200).json({ message: "No changes made to the profile", profileId: user.profileId });
-//       }
-//     } else {
-//       // User does not have a profile, create a new profile
-//       const imageFiles = req.files.selectedFileNames;
-//       let imageArray = [];
-//       if (imageFiles) {
-//         for (const file of imageFiles) {
-//           imageArray.push({
-//             data: file.data,
-//             contentType: file.mimetype,
-//           });
-//         }
-//       }
-
-//       // Handle video upload and store it as binary data
-//       const videoFile = req.files.selectedVideoFile;
-//       let videoData = null;
-//       if (videoFile) {
-//         videoData = {
-//           data: videoFile.data,
-//           contentType: videoFile.mimetype,
-//         };
-//       }
-
-//       // Create a new profile with the userId included
-//       const profile = new Profile({
-//         userId,
-//         name,
-//         title,
-//         city,
-//         gender,
-//         dateOfBirth,
-//         aboutUs,
-//         phoneNumber,
-//         age,
-//         subjectName,
-//         serviceNames,
-//         Nationality,
-//         education,
-//         specialityDegree,
-//         Experience,
-//         TeachingStyle,
-//         languages,
-//         day,
-//         time,
-//         cost,
-//         availabilityDays,
-//         availabilityMins,
-//         availabilityStatus,
-//         selectedFileNames: imageArray,
-//         selectedVideoFile: videoData,
-//       });
-
-
-//       // Assign the profileId to the user
-//       user.profileId = profile._id;
-//       await user.save();
-
-
-//       res.status(201).json({ message: "Profile created successfully", profileId: profile._id });
-//     }
-//   }  catch (error) {
-//     console.error("Error creating/updating profile:", error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while creating/updating the profile" });
-//   }
-// };
-
-
-// exports.getProfileById = async (req, res) => {
-//   try {
-//     const loggedInUserId = req.user.userId;
-
-//     const user = await User.findById(loggedInUserId);
-//     if (!user.profileId) {
-//       return res.status(404).json({ error: "Profile not found for this user" });
-//     }
-
-//     const profile = await Profile.findById(user.profileId);
-//     if (!profile) {
-//       return res.status(404).json({ error: "Profile not found" });
-//     }
-
-//     return res.status(200).json(profile);
-    
-//   } catch (error) {
-//     console.error("Error fetching profile:", error);
-//     return res
-//       .status(500)
-//       .json({ error: "An error occurred while fetching the profile" });
-//   }
-// };
-
-// exports.getAllCities = async (req, res) => {
-//   try {
-//     const citiesDocument = await City.findOne({}, "name");
-//     if (citiesDocument) {
-//       res.json(citiesDocument.name);
-//     } else {
-//       res.status(404).json({ message: "No cities found." });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "An error occurred while fetching cities." });
-//   }
-// };
-
-
-
-
+    res.status(201).json({ message: 'Profile rated successfully' });
+  } catch (error) {
+    console.error('Error rating profile:', error);
+    res.status(500).json({ error: 'An error occurred while rating the profile' });
+  }
+};

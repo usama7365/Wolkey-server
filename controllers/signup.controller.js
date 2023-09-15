@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 
 exports.PostUserSchema = async (req, res) => {
-    const { email, displayName, password } = req.body;
+    const { email, displayName, password, role } = req.body;
 
     try {
         const existingUser = await User.findOne({ email });
@@ -20,6 +20,7 @@ exports.PostUserSchema = async (req, res) => {
             displayName,
             password: hashedPassword,
             verificationToken,
+            role
         });
 
         await user.save();
@@ -38,8 +39,15 @@ exports.PostUserSchema = async (req, res) => {
             subject: 'Account Verification',
             // text: `Click the following link to verify your account: 
             // https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
-            text: `Click the following link to verify your account: 
-            https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
+
+            html: `
+            <div style="background-color: #f4f4f4; padding: 20px; text-align: center;">
+              <div style="background-color: #F55D02; padding: 20px;">
+                <h2>Click the following link to verify your account</h2>
+                <p>Click <a href="${verificationToken}">here</a> to verify your account.</p>
+              </div>
+            </div>
+          `,
         };
 
         transporter.sendMail(mailOptions, (error, info) => {

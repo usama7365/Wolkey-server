@@ -13,7 +13,7 @@ exports.forgotPassword = async (req, res) => {
 
     const resetToken = crypto.randomBytes(20).toString('hex');
     user.resetToken = resetToken;
-    user.resetTokenExpiration = Date.now() + 3600000; 
+    user.resetTokenExpiration = Date.now() + 3600000;
     await user.save();
   
     const transporter = nodemailer.createTransport({
