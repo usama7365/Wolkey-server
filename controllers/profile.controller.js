@@ -41,7 +41,6 @@ exports.createProfile = async (req, res) => {
     }
 
     if (!user.profileId) {
-      // New profile, require all fields to be filled
       const requiredFields = [
         name,
         title,
@@ -116,16 +115,21 @@ exports.createProfile = async (req, res) => {
     user.profileId = profile._id;
     await user.save();
 
-    res.status(201).json({
-      message: "Profile created/updated successfully",
-      profileId: profile._id,
-    });
-  } catch (error) {
-    console.error("Error creating/updating profile:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while creating/updating the profile" });
-  }
+    const message =
+    user.profileId && !user.profileId.equals(profile._id)
+      ? "Profile updated successfully"
+      : "Profile created successfully";
+
+  res.status(201).json({
+    message,
+    profileId: profile._id,
+  });
+} catch (error) {
+  console.error("Error creating/updating profile:", error);
+  res
+    .status(500)
+    .json({ error: "An error occurred while creating/updating the profile" });
+}
 };
 
 exports.getSingleProfileDetails = async (req, res) => {
