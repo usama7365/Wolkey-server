@@ -10,6 +10,7 @@ const {
   getAllProfiles,
   searchProfiles,
   rateProfile,
+  getSingleProfileDetails
 } = require("../controllers/profile.controller");
 const {
   logout
@@ -56,6 +57,8 @@ const upload = multer({
 router.post( "/create-profile", verifyToken, upload.fields([{   name: "selectedImageFiles",   maxCount: 50 }, {   name: "selectedVideoFile",   maxCount: 1 }, ]),  createProfile);
 
 router.get("/view-profile", verifyToken, getProfileById);
+
+router.get("/view-profile/:profileId", verifyToken, getSingleProfileDetails);
 
 router.post('/rate-profile/:profileId', verifyToken, rateProfile);
 

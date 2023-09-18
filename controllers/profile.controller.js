@@ -128,6 +128,25 @@ exports.createProfile = async (req, res) => {
   }
 };
 
+exports.getSingleProfileDetails = async (req, res) => {
+  try {
+    const profileId = req.params.profileId; 
+
+    const profile = await Profile.findById(profileId);
+
+    if (!profile) {
+      return res.status(404).json({ error: "Profile not found" });
+    }
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching the profile" });
+  }
+};
+
 exports.getProfileById = async (req, res) => {
   try {
     const loggedInUserId = req.user.userId;
@@ -192,7 +211,6 @@ exports.getAllProfiles = async (req, res) => {
       .json({ error: "An error occurred while fetching profiles" });
   }
 };
-
 
 exports.rateProfile = async (req, res) => {
   try {
