@@ -32,18 +32,20 @@ exports.PostUserSchema = async (req, res) => {
             },
         });
 
+
+    const verifyLink = `https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`;
+
+
         const mailOptions = {
             from: 'usamaaamirsohail@gmail.com',
             to: email,
             subject: 'Admin Account Verification',
-            // text: `Click the following link to verify your account: 
-            // https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`,
 
             html: `
             <div style="background-color: #f4f4f4; padding: 20px; text-align: center;">
               <div style="background-color: #F55D02; padding: 20px;">
                 <h2>Click the following link to verify Admin account</h2>
-                <p>Click <a href="https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}">here</a> to verify your account.</p>
+                <p>Click <a href="${verifyLink}">here</a> to verify your account.</p>
               </div>
             </div>
           `,
