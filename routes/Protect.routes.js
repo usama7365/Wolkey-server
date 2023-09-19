@@ -1,20 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middlewares/verifyToken");
-const {
-  DashboardController
-} = require("../controllers/dashboard");
+const { DashboardController } = require("../controllers/dashboard");
 const {
   createProfile,
   getProfileById,
   getAllProfiles,
   searchProfiles,
   rateProfile,
-  getSingleProfileDetails
+  getSingleProfileDetails,
 } = require("../controllers/profile.controller");
-const {
-  logout
-} = require("../controllers/logout.controller");
+const { logout } = require("../controllers/logout.controller");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
@@ -29,7 +25,7 @@ const dirs = [
 dirs.forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, {
-      recursive: true
+      recursive: true,
     });
   }
 });
@@ -51,16 +47,30 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage
+  storage: storage,
 });
 
-router.post( "/create-profile", verifyToken, upload.fields([{   name: "selectedImageFiles",   maxCount: 50 }, {   name: "selectedVideoFile",   maxCount: 1 }, ]),  createProfile);
+router.post(
+  "/create-profile",
+  verifyToken,
+  upload.fields([
+    {
+      name: "selectedImageFiles",
+      maxCount: 50,
+    },
+    {
+      name: "selectedVideoFile",
+      maxCount: 1,
+    },
+  ]),
+  createProfile
+);
 
 router.get("/view-profile", verifyToken, getProfileById);
 
 router.get("/view-profile/:profileId", verifyToken, getSingleProfileDetails);
 
-router.post('/rate-profile/:profileId', verifyToken, rateProfile);
+router.post("/rate-profile/:profileId", verifyToken, rateProfile);
 
 router.get("/all-profiles", getAllProfiles);
 
