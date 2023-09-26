@@ -14,6 +14,7 @@ const protectedRoute = require("./routes/Protect.routes");
 const AgencyRouter = require("./routes/Agency.route");
 // const bodyParser = require("body-parser");
 const videoRoutes = require("./routes/video.routes");
+const adminRoute = require('./routes/Admin Routes/Admin.route')
 
 const app = express();
 app.use(express.json());
@@ -60,6 +61,13 @@ app.use("/", AgencyRouter);
 // app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use("/videos", videoRoutes);
+
+
+//Admin Routes
+
+app.use("/admin", adminRoute);
+
+
 
 // Serve static files from the "public/uploads" directory
 // app.use('/uploads', express.static('public/uploads'));

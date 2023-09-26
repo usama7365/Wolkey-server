@@ -16,25 +16,28 @@ const UsersSchema = new mongoose.Schema(
       required: true,
     },
     verificationToken: String,
-    
     isVerified: {
       type: Boolean,
       default: false,
     },
-    profileId: {  
+    profileId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Profile', 
+      ref: 'Profile',
     },
-    AgencyProfile:{
+    AgencyProfile: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:'agencyprofiles',
+      ref: 'agencyprofiles',
     },
     role: String,
-    resetToken: String, 
+    resetToken: String,
     resetTokenExpiration: Date,
+    isActive: {
+      type: Boolean,
+      default: true, // By default, users are active
+    },
   },
   {
-    collection: "Users",
+    collection: 'Users',
     timestamps: true,
   }
 );

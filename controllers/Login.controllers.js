@@ -39,6 +39,7 @@ exports.PostLoginSchema = async (req, res) => {
       token,
       role: user.role,
       isVerified: user.isVerified,
+      isActive: user.isActive,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     });

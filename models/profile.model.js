@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
-
-const profileSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  title: String,
-  aboutUs: String,
-  subjectName: [String],
-  serviceNames:[String],
-  Experience: String,
-  TeachingStyle: String,
+const profileSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    title: String,
+    aboutUs: String,
+    subjectName: [String],
+    serviceNames: [String],
+    Experience: String,
+    TeachingStyle: String,
     gender: String,
     age: Number,
     city: String,
@@ -21,27 +21,25 @@ const profileSchema = new mongoose.Schema({
     specialityDegree: String,
     Nationality: String,
     education: String,
-    prices:[],
+    prices: [],
     availabilityDays: {
-      type: String, 
+      type: String,
     },
-  
+
     availabilityMins: {
       type: String,
     },
-    selectedTimes:Array,
-    
+    selectedTimes: Array,
+
     selectedImageFiles: [
       {
-       type: String
-
+        type: String,
       },
     ],
 
     selectedVideoFile: [
       {
-        type: String
-
+        type: String,
       },
     ],
 
@@ -54,18 +52,15 @@ const profileSchema = new mongoose.Schema({
         review: String,
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: "User",
         },
       },
     ],
-
-},
-{
-  collection: "Profile",
-  timestamps: true,
-}
-
-
+  },
+  {
+    collection: "Profile",
+    timestamps: true,
+  }
 );
 
 const Profile = mongoose.model("Profile", profileSchema);

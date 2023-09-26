@@ -245,3 +245,32 @@ exports.rateProfile = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while rating the profile' });
   }
 };
+
+
+// Server-Side (Node.js/Express)
+
+exports.deleteProfile = async (req, res) => {
+  try {
+    const profileId = req.params.profileId; // Use req.params.profileId to get the profileId from the URL
+
+    console.log("Deleting profile with _id:", profileId);
+
+    // Check if the profile exists
+    const profile = await Profile.findById(profileId);
+    if (!profile) {
+      return res.status(404).json({ error: "Profile not found" });
+    }
+
+    // Delete the profile
+    await Profile.findByIdAndDelete(profileId);
+
+    res.status(200).json({ message: "Profile deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting profile:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the profile" });
+  }
+};
+
+

@@ -5,6 +5,7 @@ const { DashboardController } = require("../controllers/dashboard");
 const {
   createProfile,
   getProfileById,
+  deleteProfile,
   getAllProfiles,
   searchProfiles,
   rateProfile,
@@ -66,14 +67,23 @@ router.post(
   createProfile
 );
 
-router.get("/view-profile", verifyToken, getProfileById);
+router.get("/view-profile", verifyToken, (req, res, next) => {
+  if (req.query.profileId) {
+    return res.redirect(`/view-profile/${req.query.profileId}`);
+  }
+  return getProfileById(req, res, next);
+});
 
 router.get("/view-profile/:profileId", verifyToken, getSingleProfileDetails);
+
+router.post("/rate-profile/:profileId", verifyToken, rateProfile);
 
 router.post("/rate-profile/:profileId", verifyToken, rateProfile);
 
 router.get("/all-profiles", getAllProfiles);
 
 router.get("/search-profiles", searchProfiles);
+
+router.delete("/delete-profile/:profileId", verifyToken, deleteProfile);
 
 module.exports = router;

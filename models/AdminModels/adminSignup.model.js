@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const adminSchema = new mongoose.Schema(
   {
   email: {
@@ -11,14 +10,18 @@ const adminSchema = new mongoose.Schema(
   password: {
     type: String,
     required: true,
+  }, 
+  name: {
+    type: String,
+    required: true,
   },
   isVerified: {
     type: Boolean,
     default: false,
   },
   role: String,
-  resetToken: String, 
-  resetTokenExpiration: Date,
+  verificationToken: String,
+
 },
 
 {
