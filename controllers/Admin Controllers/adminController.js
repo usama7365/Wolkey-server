@@ -98,6 +98,8 @@ exports.AdminLogin = async (req, res) => {
       message: 'Login successful',
       role: admin.role,
       name: admin.name,
+      email: admin.email,
+
       token,
       isVerified: admin.isVerified,
       createdAt: admin.createdAt,
