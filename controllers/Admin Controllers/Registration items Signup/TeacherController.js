@@ -4,12 +4,23 @@ const Registration = require('../../../models/AdminModels/Registration.model');
 exports.createTeacherRegistration = async (req, res) => {
   try {
     const { title, features, buttons } = req.body;
-    const registration = new Registration({ title, features, buttons });
-    await registration.save();
-    res.status(201).json(registration);
+
+    // Validate the input data
+    if (!title || !buttons) {
+      return res.status(400).json({ error: 'Title and buttons are required.' });
+    }
+
+    const registration = new Registration({
+      title,
+      features: features || [],
+      buttons,
+    });
+
+    const savedRegistration = await registration.save();
+    res.status(201).json(savedRegistration);
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: 'An error occurred while creating teacher registration' });
+    console.error('Error creating teacher registration:', error);
+    res.status(500).json({ error: 'An error occurred while creating teacher registration.' });
   }
 };
 

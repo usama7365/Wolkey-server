@@ -247,8 +247,6 @@ exports.rateProfile = async (req, res) => {
 };
 
 
-// Server-Side (Node.js/Express)
-
 exports.deleteProfile = async (req, res) => {
   try {
     const profileId = req.params.profileId; // Use req.params.profileId to get the profileId from the URL
@@ -263,6 +261,19 @@ exports.deleteProfile = async (req, res) => {
 
     // Delete the profile
     await Profile.findByIdAndDelete(profileId);
+
+    // Find and update the corresponding user document to remove the profileId reference
+    const users = await User.find({ profileId: profileId });
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ error: "No users associated with this profile" });
+    }
+
+    // Loop through each user with the same profileId and remove the reference
+    for (const user of users) {
+      user.profileId = null; // Remove the profileId reference
+      await user.save(); // Save the updated user document
+    }
 
     res.status(200).json({ message: "Profile deleted successfully" });
   } catch (error) {
