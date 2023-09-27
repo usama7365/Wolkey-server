@@ -33,7 +33,7 @@ const UsersSchema = new mongoose.Schema(
     resetTokenExpiration: Date,
     isActive: {
       type: Boolean,
-      default: true, // By default, users are active
+      default: true,  // By default, users are active
     },
   },
   {
