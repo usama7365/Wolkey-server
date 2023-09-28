@@ -34,6 +34,7 @@ router.get("/all-profiles", ProfileController.getAllProfiles);
 
 router.delete("/delete-profile/:profileId",  verifyToken, ProfileController.deleteProfile);
 
+router.post("/filter-profiles", ProfileController.filterProfiles);
 
 // OrangeNavbar Routes
 

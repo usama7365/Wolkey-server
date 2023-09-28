@@ -284,4 +284,46 @@ exports.deleteProfile = async (req, res) => {
   }
 };
 
+exports.filterProfiles = async (req, res) => {
+  try {
+    const filters = req.body;
+
+    // Build a MongoDB query based on the filters
+    const query = {};
+
+    if (filters.gender) {
+      query.gender = filters.gender;
+    }
+
+    if (filters.languages && filters.languages.length > 0) {
+      query.languages = { $in: filters.languages };
+    }
+
+    if (filters.ageMin && filters.ageMax) {
+      query.age = { $gte: filters.ageMin, $lte: filters.ageMax };
+    } else if (filters.ageMin) {
+      query.age = { $gte: filters.ageMin };
+    } else if (filters.ageMax) {
+      query.age = { $lte: filters.ageMax };
+    }
+
+    if (filters.city) {
+      query.city = filters.city;
+    }
+
+    if (filters.subjectName && filters.subjectName.length > 0) {
+      query.subjectName = { $in: filters.subjectName };
+    }
+
+    // Add more filter conditions as needed for other fields
+
+    // Execute the query
+    const filteredProfiles = await Profile.find(query);
+
+    res.status(200).json(filteredProfiles);
+  } catch (error) {
+    console.error('Error filtering profiles:', error);
+    res.status(500).json({ error: 'An error occurred while filtering profiles' });
+  }
+};
 
