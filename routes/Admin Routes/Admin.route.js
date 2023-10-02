@@ -7,11 +7,10 @@ const verifyToken = require("../../middlewares/verifyToken");
 const agencyController =require('../../controllers/Admin Controllers/Registration items Signup/AgencyController')
 const teacherController =require('../../controllers/Admin Controllers/Registration items Signup/TeacherController')
 const advisoryController =require('../../controllers/Admin Controllers/Registration items Signup/AdvisoryController')
-
 const ProfileController =require('../../controllers/profile.controller')
-
 const UserController =require('../../controllers/Admin Controllers/User/ViewUser.controller')
 const filterController = require('../../controllers/Admin Controllers/filter.controller');
+const metaTagsController = require("../../controllers/Admin Controllers/metaTagsController");
 
 
 router.post('/signup', adminController.AdminSignup);
@@ -105,5 +104,10 @@ router.get('/filter/:id',verifyToken, filterController.getFilterById);
 router.put('/filter/:id',verifyToken, filterController.updateFilter);
 
 router.delete('/filter/:id',verifyToken, filterController.deleteFilter);
+
+
+// Meta Tags Routes
+router.post("/create-meta-tags",verifyToken, metaTagsController.createMetaTags);
+
 
 module.exports = router;

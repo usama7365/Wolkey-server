@@ -7,7 +7,7 @@ const filterSchema = new mongoose.Schema({
   },
   inputType: {
     type: String,
-    enum: ['dropdown', 'text'], // Enum for input types
+    enum: ['dropdown', 'text', 'radio', 'rangeSlider'], // Enum for input types
     required: true,
   },
   dropdownValues: [String], // Array to store dropdown values
