@@ -271,7 +271,7 @@ exports.deleteProfile = async (req, res) => {
 
     // Loop through each user with the same profileId and remove the reference
     for (const user of users) {
-      user.profileId = null; // Remove the profileId reference
+      delete user.profileId; // Remove the profileId reference
       await user.save(); // Save the updated user document
     }
 
