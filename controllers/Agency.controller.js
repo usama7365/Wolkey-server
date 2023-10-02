@@ -38,7 +38,6 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         profileId: existingProfile._id,
       });
     } else {
-      // Agency profile does not exist, create a new one
       const newAgencyProfile = new AgencyProfile({
         kvkNumber,
         btwNumber,
@@ -66,4 +65,24 @@ const createOrUpdateAgencyProfile = async (req, res) => {
   }
 };
 
-module.exports = { createOrUpdateAgencyProfile };
+
+
+const getAgencyProfileById = async (req, res) => {
+  try {
+    const agencyProfileId = req.params.agencyProfileId; // Get the profile ID from the URL params
+    
+    const agencyProfile = await AgencyProfile.findById(agencyProfileId);
+
+    if (!agencyProfile) {
+      return res.status(404).json({ error: "Agency profile not found" });
+    }
+
+    res.status(200).json({ agencyProfile });
+  } catch (error) {
+    console.error("Error fetching agency profile by ID:", error);
+    res.status(500).json({ error: "An error occurred while fetching the agency profile" });
+  }
+};
+
+
+module.exports = { createOrUpdateAgencyProfile, getAgencyProfileById };

@@ -109,5 +109,10 @@ router.delete('/filter/:id',verifyToken, filterController.deleteFilter);
 // Meta Tags Routes
 router.post("/create-meta-tags",verifyToken, metaTagsController.createMetaTags);
 
+router.get("/view-meta-tags", metaTagsController.viewAllMetaTags);
+
+router.delete('/delete-meta-tags/:id', verifyToken, metaTagsController.deleteMetaTags);
+
+
 
 module.exports = router;
