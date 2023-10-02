@@ -3,8 +3,15 @@ const OrangeNavbar = require('../../models/AdminModels/OrangeNavbar.model');
 // Create a new menu item
 exports.createMenuItem = async (req, res) => {
   try {
-    const { title,  } = req.body;
-    const menuItem = new OrangeNavbar({ title,  });
+    const { title } = req.body;
+
+    // Check if the maximum limit of 6 items is reached
+    const menuItemsCount = await OrangeNavbar.countDocuments();
+    if (menuItemsCount >= 6) {
+      return res.status(400).json({ error: 'Maximum limit of 7 items reached' });
+    }
+
+    const menuItem = new OrangeNavbar({ title });
     await menuItem.save();
     res.status(201).json(menuItem);
   } catch (error) {

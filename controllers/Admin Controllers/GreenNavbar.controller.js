@@ -4,6 +4,13 @@ const GreenNavbar = require('../../models/AdminModels/GreenNavbar.model');
 exports.createGreenMenuItem = async (req, res) => {
   try {
     const { title, link } = req.body;
+
+    // Check if there are already 2 items in the database
+    const itemCount = await GreenNavbar.countDocuments();
+    if (itemCount >= 2) {
+      return res.status(400).json({ error: 'You can only create up to 2 items.' });
+    }
+
     const menuItem = new GreenNavbar({ title, link });
     await menuItem.save();
     res.status(201).json(menuItem);
@@ -11,6 +18,7 @@ exports.createGreenMenuItem = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating the menu item' });
   }
 };
+
 
 // Get all menu items for the green navbar
 exports.getAllGreenMenuItems = async (req, res) => {
