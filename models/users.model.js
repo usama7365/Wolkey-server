@@ -24,10 +24,11 @@ const UsersSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Profile',
     },
-    AgencyProfile: {
+    AgencyprofileId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'agencyprofiles',
+      ref: 'AgencyProfile',
     },
+    
     role: String,
     resetToken: String,
     resetTokenExpiration: Date,

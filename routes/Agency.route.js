@@ -4,10 +4,9 @@ const verifyToken = require('../middlewares/verifyToken');
 const agencyProfileController = require('../controllers/Agency.controller');
 
 
-
 router.post('/createOrUpdateAgencyProfile',verifyToken, agencyProfileController.createOrUpdateAgencyProfile);
 
-router.get("/getAgencyProfile", verifyToken, (req, res, next) => {
+router.get("/getAgencyProfile", (req, res, next) => {
     if (req.query.profileId) {
       return res.redirect(`/getAgencyProfile/${req.query.profileId}`);
     }

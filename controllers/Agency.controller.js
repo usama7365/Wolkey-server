@@ -1,4 +1,5 @@
 const AgencyProfile = require('../models/agency.profile.model');
+const User = require('../models/users.model');
 
 const createOrUpdateAgencyProfile = async (req, res) => {
   try {
@@ -37,6 +38,18 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         message: "Agency profile updated successfully",
         profileId: existingProfile._id,
       });
+
+      // Update the Users collection with the AgencyProfile's _id as AgencyprofileId
+      const { userId } = req.user; // Get the logged-in user's ID
+      console.log("User ID:", userId);
+
+      const user = await User.findById(userId);
+      console.log("User Object:", user);
+
+      if (user) {
+        user.AgencyprofileId = existingProfile._id; // Set the AgencyprofileId
+        await user.save();
+      }
     } else {
       const newAgencyProfile = new AgencyProfile({
         kvkNumber,
@@ -54,8 +67,16 @@ const createOrUpdateAgencyProfile = async (req, res) => {
 
       res.status(201).json({
         message: "Agency profile created successfully",
-        profileId: newAgencyProfile._id,
+        AgencyprofileId: newAgencyProfile._id,
       });
+
+      // Update the Users collection with the new AgencyProfile's _id as AgencyprofileId
+      const { userId } = req.user; // Get the logged-in user's ID
+      const user = await User.findById(userId);
+      if (user) {
+        user.AgencyprofileId = newAgencyProfile._id; // Set the AgencyprofileId
+        await user.save();
+      }
     }
   } catch (error) {
     console.error("Error creating/updating agency profile:", error);
@@ -64,8 +85,6 @@ const createOrUpdateAgencyProfile = async (req, res) => {
       .json({ error: "An error occurred while creating/updating the agency profile" });
   }
 };
-
-
 
 const getAgencyProfileById = async (req, res) => {
   try {
@@ -83,6 +102,5 @@ const getAgencyProfileById = async (req, res) => {
     res.status(500).json({ error: "An error occurred while fetching the agency profile" });
   }
 };
-
 
 module.exports = { createOrUpdateAgencyProfile, getAgencyProfileById };
