@@ -11,6 +11,7 @@ const ProfileController =require('../../controllers/profile.controller')
 const UserController =require('../../controllers/Admin Controllers/User/ViewUser.controller')
 const filterController = require('../../controllers/Admin Controllers/filter.controller');
 const metaTagsController = require("../../controllers/Admin Controllers/metaTagsController");
+const RoleCountController = require('../../controllers/Admin Controllers/RoleCount.controller');
 
 
 router.post('/signup', adminController.AdminSignup);
@@ -113,6 +114,9 @@ router.get("/view-meta-tags", metaTagsController.viewAllMetaTags);
 
 router.delete('/delete-meta-tags/:id', verifyToken, metaTagsController.deleteMetaTags);
 
+// Get role count for Dashboard
+
+router.get('/role-counts', RoleCountController.getRoleCounts);
 
 
 module.exports = router;
