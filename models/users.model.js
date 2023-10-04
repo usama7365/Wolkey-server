@@ -28,6 +28,10 @@ const UsersSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'AgencyProfile',
     },
+    postId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Image',
+    },
     
     role: String,
     resetToken: String,

@@ -7,6 +7,10 @@ const uploadVideo = async (req, res) => {
     console.log(req.body, "body"); // Log the request body
     console.log(req.file, "File"); // Log the uploaded file information
   try {
+
+
+    // return res.json({ files: req.file });
+
     if (!req.file) {
       return res.status(400).json({ error: 'Please upload a video file' });
     }

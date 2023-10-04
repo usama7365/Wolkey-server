@@ -39,7 +39,6 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         profileId: existingProfile._id,
       });
 
-      // Update the Users collection with the AgencyProfile's _id as AgencyprofileId
       const { userId } = req.user; // Get the logged-in user's ID
       console.log("User ID:", userId);
 
