@@ -7,8 +7,8 @@ const agencyProfileController = require('../controllers/Agency.controller');
 router.post('/createOrUpdateAgencyProfile',verifyToken, agencyProfileController.createOrUpdateAgencyProfile);
 
 router.get("/getAgencyProfile", (req, res, next) => {
-    if (req.query.profileId) {
-      return res.redirect(`/getAgencyProfile/${req.query.profileId}`);
+    if (req.query.AgencyprofileId) {
+      return res.redirect(`/getAgencyProfile/${req.query.AgencyprofileId}`);
     }
     return agencyProfileController.getAgencyProfileById(req, res, next);
   });
