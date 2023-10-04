@@ -13,18 +13,23 @@ exports.PostLoginSchema = async (req, res) => {
     }
 
     if (!user.isVerified) {
-      return res
-        .status(403)
-        .json({
-          error:
-            "Verification email sent to your email. Please verify your account.",
-        });
+      return res.status(403).json({
+        error:
+          "Verification email sent to your email. Please verify your account.",
+      });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid password" });
+    }
+
+    // Check if the user is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        error: "Your account is not active. Please contact support for assistance.",
+      });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
