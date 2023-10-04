@@ -11,6 +11,8 @@ const {
   rateProfile,
   getSingleProfileDetails,
 } = require("../controllers/profile.controller");
+const cityController = require("../controllers/city.controller");
+
 const { logout } = require("../controllers/logout.controller");
 const path = require("path");
 const multer = require("multer");
@@ -85,5 +87,10 @@ router.get("/all-profiles", getAllProfiles);
 router.get("/search-profiles", searchProfiles);
 
 router.delete("/delete-profile/:profileId", verifyToken, deleteProfile);
+
+
+router.get("/cities", cityController.getAllCities);
+
+
 
 module.exports = router;
