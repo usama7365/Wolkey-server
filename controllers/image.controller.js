@@ -39,3 +39,17 @@ exports.getUserImages = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching user images' });
   }
 };
+
+
+exports.getAllUserImages = async (req, res) => {
+  const { userId } = req.user;
+
+  try {
+    const userImages = await Image.find({ userId });
+    const imagePaths = userImages.map((image) => image.imagePath);
+    res.status(200).json({ userImages, imagePaths });
+  } catch (error) {
+    console.error('Error fetching user images:', error);
+    res.status(500).json({ error: 'An error occurred while fetching user images' });
+  }
+};

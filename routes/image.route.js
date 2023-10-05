@@ -25,4 +25,8 @@ router.post('/post-image', verifyToken, upload.any('image'), imageController.pos
 // Get user-specific images
 router.get('/user-images', verifyToken, imageController.getUserImages);
 
+// New route to get all user-related post images and store in an array
+router.get('/all-user-images', verifyToken, imageController.getAllUserImages);
+
+
 module.exports = router;
