@@ -15,7 +15,7 @@ exports.postImage = async (req, res) => {
       return res.status(400).json({ error: "Please upload at least one image" });
     }
 
-    const imagePaths = req.files.map((file) => file.path);
+    const imagePaths = req.files.map((file) => file.path.replace('public\\', ''));
 
     // Create a separate post for each image
     for (const imagePath of imagePaths) {
@@ -51,7 +51,7 @@ exports.getAllUserImages = async (req, res) => {
 
   try {
     const userImages = await Image.find({ userId });
-    const imagePaths = userImages.map((image) => image.imagePath);
+    const imagePaths = userImages.map((image) => image.imagePath.replace('public\\', ''));
     res.status(200).json({ userImages, imagePaths });
   } catch (error) {
     console.error('Error fetching user images:', error);

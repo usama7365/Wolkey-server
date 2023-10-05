@@ -58,8 +58,9 @@ app.use("/", protectedRoute);
 app.use("/", AgencyRouter);
 
 
+// app.use('/profile-uploads', express.static('public/uploads'));
 
-app.use('/public', express.static('public'));
+app.use(express.static('public'));
 
 app.use("/videos", videoRoutes);
 
