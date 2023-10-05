@@ -29,4 +29,7 @@ router.get('/user-images', verifyToken, imageController.getUserImages);
 router.get('/all-user-images', verifyToken, imageController.getAllUserImages);
 
 
+router.get("/user-gallery/:profileId", imageController.getUserGallery);
+
+
 module.exports = router;

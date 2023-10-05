@@ -10,6 +10,10 @@ exports.postImage = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Check if there are any uploaded files
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "Please upload at least one image" });
+    }
 
     const imagePaths = req.files.map((file) => file.path);
 
@@ -27,6 +31,7 @@ exports.postImage = async (req, res) => {
       .json({ error: "An error occurred while uploading the images" });
   }
 };
+
 
 exports.getUserImages = async (req, res) => {
   const { userId } = req.user;
@@ -48,6 +53,18 @@ exports.getAllUserImages = async (req, res) => {
     const userImages = await Image.find({ userId });
     const imagePaths = userImages.map((image) => image.imagePath);
     res.status(200).json({ userImages, imagePaths });
+  } catch (error) {
+    console.error('Error fetching user images:', error);
+    res.status(500).json({ error: 'An error occurred while fetching user images' });
+  }
+};
+
+exports.getUserGallery = async (req, res) => {
+  const { profileId } = req.params;
+
+  try {
+    const userImages = await Image.find({ userId: profileId });
+    res.status(200).json(userImages);
   } catch (error) {
     console.error('Error fetching user images:', error);
     res.status(500).json({ error: 'An error occurred while fetching user images' });
