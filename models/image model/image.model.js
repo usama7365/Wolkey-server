@@ -8,16 +8,12 @@ const imageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    displayName: {
-      type: String, // Change this to String
-      required: true,
-    },
-    imagePath: [
+
+    imagePath: 
       {
         type: String,
         required: true,
       },
-    ],
   },
   {
     collection: "Image",
