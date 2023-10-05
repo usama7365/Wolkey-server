@@ -58,7 +58,9 @@ app.use("/", protectedRoute);
 app.use("/", AgencyRouter);
 
 
-app.use(express.static("public"));
+
+app.use('/public', express.static('public'));
+
 app.use("/videos", videoRoutes);
 
 app.use("/", imageRoute);
