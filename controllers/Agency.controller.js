@@ -39,14 +39,14 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         profileId: existingProfile._id,
       });
 
-      const { userId } = req.user; // Get the logged-in user's ID
+      const { userId } = req.user;
       console.log("User ID:", userId);
 
       const user = await User.findById(userId);
       console.log("User Object:", user);
 
       if (user) {
-        user.AgencyprofileId = existingProfile._id; // Set the AgencyprofileId
+        user.AgencyprofileId = existingProfile._id;
         await user.save();
       }
     } else {
@@ -69,11 +69,10 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         AgencyprofileId: newAgencyProfile._id,
       });
 
-      // Update the Users collection with the new AgencyProfile's _id as AgencyprofileId
-      const { userId } = req.user; // Get the logged-in user's ID
+      const { userId } = req.user;
       const user = await User.findById(userId);
       if (user) {
-        user.AgencyprofileId = newAgencyProfile._id; // Set the AgencyprofileId
+        user.AgencyprofileId = newAgencyProfile._id;
         await user.save();
       }
     }
@@ -87,7 +86,7 @@ const createOrUpdateAgencyProfile = async (req, res) => {
 
 const getAgencyProfileById = async (req, res) => {
   try {
-    const agencyProfileId = req.params.agencyProfileId; // Get the profile ID from the URL params
+    const agencyProfileId = req.params.agencyProfileId;
     
     const agencyProfile = await AgencyProfile.findById(agencyProfileId);
 
