@@ -13,6 +13,10 @@ const metaTagsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  canonical:{
+    type: String,
+    required:true
+  }
 });
 
 module.exports = mongoose.model("MetaTag", metaTagsSchema);

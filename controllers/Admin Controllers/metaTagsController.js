@@ -2,11 +2,12 @@ const MetaTag = require("../../models/AdminModels/metaTags.model");
 
 exports.createMetaTags = async (req, res) => {
   try {
-    const { title, description, keywords } = req.body;
+    const { title, description, keywords, canonical } = req.body;
     const metaTag = new MetaTag({
       title,
       description,
       keywords,
+      canonical,
     });
     const savedMetaTag = await metaTag.save();
     res.json(savedMetaTag);

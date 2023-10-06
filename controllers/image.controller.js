@@ -60,10 +60,10 @@ exports.getAllUserImages = async (req, res) => {
 };
 
 exports.getUserGallery = async (req, res) => {
-  const { profileId } = req.params;
+  const { userId } = req.params; // Use userId instead of profileId
 
   try {
-    const userImages = await Image.find({ userId: profileId });
+    const userImages = await Image.find({ userId });
     res.status(200).json(userImages);
   } catch (error) {
     console.error('Error fetching user images:', error);

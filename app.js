@@ -15,6 +15,7 @@ const AgencyRouter = require("./routes/Agency.route");
 const videoRoutes = require("./routes/video.routes");
 const adminRoute = require('./routes/Admin Routes/Admin.route')
 const imageRoute = require("./routes/image.route")
+const ProfileVideoRoute = require("./routes/profile.video.route")
 
 const app = express();
 app.use(express.json());
@@ -58,13 +59,13 @@ app.use("/", protectedRoute);
 app.use("/", AgencyRouter);
 
 
-// app.use('/profile-uploads', express.static('public/uploads'));
-
 app.use(express.static('public'));
 
 app.use("/videos", videoRoutes);
 
+//Profile
 app.use("/", imageRoute);
+app.use("/", ProfileVideoRoute);
 
 
 
