@@ -42,7 +42,10 @@ const profileSchema = new mongoose.Schema(
         type: String,
       },
     ],
-
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+    },
     ratings: [
       {
         stars: {
@@ -52,7 +55,7 @@ const profileSchema = new mongoose.Schema(
         review: String,
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          ref: "Users",
         },
       },
     ],
