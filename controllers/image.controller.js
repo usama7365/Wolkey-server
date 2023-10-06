@@ -60,7 +60,8 @@ exports.getAllUserImages = async (req, res) => {
 };
 
 exports.getUserGallery = async (req, res) => {
-  const { userId } = req.params; // Use userId instead of profileId
+  const { userId } = req.params;
+  console.log(userId, "idkjahdkau");
 
   try {
     const userImages = await Image.find({ userId });

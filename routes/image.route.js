@@ -28,7 +28,6 @@ router.get('/user-images', verifyToken, imageController.getUserImages);
 // New route to get all user-related post images and store in an array
 router.get('/all-user-images', verifyToken, imageController.getAllUserImages);
 
-
 router.get("/user-gallery/:userId", imageController.getUserGallery);
 
 
