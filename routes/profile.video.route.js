@@ -1,4 +1,3 @@
-// routes/video.routes.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -8,7 +7,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/videos');
+    cb(null, 'public/uploads/videos');    
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -19,15 +18,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Post a video
 router.post('/post-video', verifyToken, upload.any('video'), videoController.postVideo);
 
-// Get user-specific videos
-router.get('/user-videos', verifyToken, videoController.getUserVideos);
+router.get("/user-videos/:userId", videoController.getVideosByUserId);
 
-// New route to get all user-related videos and store in an array
-router.get('/all-user-videos', verifyToken, videoController.getAllUserVideos);
-
-router.get("/user-video-gallery/:userId", videoController.getUserVideoGallery);
 
 module.exports = router;

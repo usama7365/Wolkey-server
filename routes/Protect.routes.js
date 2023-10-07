@@ -2,17 +2,8 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middlewares/verifyToken");
 const { DashboardController } = require("../controllers/dashboard");
-const {
-  createProfile,
-  getProfileById,
-  deleteProfile,
-  getAllProfiles,
-  searchProfiles,
-  rateProfile,
-  getSingleProfileDetails,
-} = require("../controllers/profile.controller");
+const {createProfile,getProfileById,deleteProfile,getAllProfiles,searchProfiles,rateProfile,getSingleProfileDetails,} = require("../controllers/profile.controller");
 const cityController = require("../controllers/city.controller");
-
 const { logout } = require("../controllers/logout.controller");
 const path = require("path");
 const multer = require("multer");
@@ -88,9 +79,6 @@ router.get("/search-profiles", searchProfiles);
 
 router.delete("/delete-profile/:profileId", verifyToken, deleteProfile);
 
-
 router.get("/cities", cityController.getAllCities);
-
-
 
 module.exports = router;

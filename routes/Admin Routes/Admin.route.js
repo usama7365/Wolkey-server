@@ -13,7 +13,6 @@ const filterController = require('../../controllers/Admin Controllers/filter.con
 const metaTagsController = require("../../controllers/Admin Controllers/metaTagsController");
 const RoleCountController = require('../../controllers/Admin Controllers/RoleCount.controller');
 
-
 router.post('/signup', adminController.AdminSignup);
 
 router.post('/login', adminController.AdminLogin);
@@ -105,7 +104,6 @@ router.get('/filter/:id',verifyToken, filterController.getFilterById);
 router.put('/filter/:id',verifyToken, filterController.updateFilter);
 
 router.delete('/filter/:id',verifyToken, filterController.deleteFilter);
-
 
 // Meta Tags Routes
 router.post("/create-meta-tags",verifyToken, metaTagsController.createMetaTags);

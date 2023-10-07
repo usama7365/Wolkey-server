@@ -33,40 +33,21 @@ exports.postVideo = async (req, res) => {
   }
 };
 
-exports.getUserVideos = async (req, res) => {
-  const { userId } = req.user;
+exports.getVideosByUserId = async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    const userVideos = await Video.find({ userId });
-    res.status(200).json(userVideos);
+    // Find all videos associated with the specified user ID
+    const videos = await Video.find({ userId });
+
+    if (!videos) {
+      return res.status(404).json({ error: 'No videos found for this user' });
+    }
+
+    // Return the list of videos
+    res.status(200).json(videos);
   } catch (error) {
-    console.error('Error fetching user videos:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user videos' });
+    console.error('Error fetching videos:', error);
+    res.status(500).json({ error: 'An error occurred while fetching videos' });
   }
 };
-
-exports.getAllUserVideos = async (req, res) => {
-  const { userId } = req.user;
-
-  try {
-    const userVideos = await Video.find({ userId });
-    const videoPaths = userVideos.map((video) => video.videoPath.replace('public\\', ''));
-    res.status(200).json({ userVideos, videoPaths });
-  } catch (error) {
-    console.error('Error fetching user videos:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user videos' });
-  }
-};
-
-exports.getUserVideoGallery = async (req, res) => {
-  const { userId } = req.params; // Use userId instead of profileId
-
-  try {
-    const userVideos = await Video.find({ userId });
-    res.status(200).json(userVideos);
-  } catch (error) {
-    console.error('Error fetching user videos:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user videos' });
-  }
-};
-
