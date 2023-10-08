@@ -22,13 +22,9 @@ const upload = multer({ storage });
 // Post an image
 router.post('/post-image', verifyToken, upload.any('image'), imageController.postImage);
 
-// Get user-specific images
-router.get('/user-images', verifyToken, imageController.getUserImages);
 
-// New route to get all user-related post images and store in an array
-router.get('/all-user-images', verifyToken, imageController.getAllUserImages);
+router.get('/user-images/:userId', imageController.getImagesByUserId);
 
-router.get("/user-gallery/:userId", imageController.getUserGallery);
 
 
 module.exports = router;
