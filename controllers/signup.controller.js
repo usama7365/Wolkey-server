@@ -33,7 +33,7 @@ exports.PostUserSchema = async (req, res) => {
             },
         });
 
-        const verifyLink = `https://main.ddbwdjepg8yrm.amplifyapp.com/verify/${verificationToken}`;
+        const verifyLink = `https://wolkey-client-side-kx7yr0cxs-onism.vercel.app/verify/${verificationToken}`;
 
 
         const mailOptions = {
