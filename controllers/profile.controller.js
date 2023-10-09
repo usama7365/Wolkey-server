@@ -41,33 +41,33 @@ exports.createProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+  if (!user.profileId) {
+      const requiredFields = [
+        name,
+        title,
+        city,
+        gender,
+        dateOfBirth,
+        aboutUs,
+        phoneNumber,
+        age,
+        subjectName,
+        serviceNames,
+        Nationality,
+        education,
+        specialityDegree,
+        Experience,
+        TeachingStyle,
+        languages,
+        prices,
+        selectedTimes,
+      ];
 
-    // if (!user.profileId) {
-    //   const requiredFields = [
-    //     name,
-    //     title,
-    //     city,
-    //     gender,
-    //     dateOfBirth,
-    //     aboutUs,
-    //     phoneNumber,
-    //     age,
-    //     subjectName,
-    //     serviceNames,
-    //     Nationality,
-    //     education,
-    //     specialityDegree,
-    //     Experience,
-    //     TeachingStyle,
-    //     languages,
-    //     prices,
-    //     selectedTimes,
-    //   ];
-
-    //   if (requiredFields.some((field) => !field)) {
-    //     return res.status(400).json({ error: "Please fill all fields" });
-    //   }
-    // }
+      if (requiredFields.some((field) => !field)) {
+        return res.status(400).json({ error: "Please fill all fields" });
+      }
+    }
+  
 
     const profile = user.profileId
       
