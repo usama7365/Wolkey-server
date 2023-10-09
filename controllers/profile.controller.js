@@ -42,32 +42,32 @@ exports.createProfile = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (!user.profileId) {
-      const requiredFields = [
-        name,
-        title,
-        city,
-        gender,
-        dateOfBirth,
-        aboutUs,
-        phoneNumber,
-        age,
-        subjectName,
-        serviceNames,
-        Nationality,
-        education,
-        specialityDegree,
-        Experience,
-        TeachingStyle,
-        languages,
-        prices,
-        selectedTimes,
-      ];
+    // if (!user.profileId) {
+    //   const requiredFields = [
+    //     name,
+    //     title,
+    //     city,
+    //     gender,
+    //     dateOfBirth,
+    //     aboutUs,
+    //     phoneNumber,
+    //     age,
+    //     subjectName,
+    //     serviceNames,
+    //     Nationality,
+    //     education,
+    //     specialityDegree,
+    //     Experience,
+    //     TeachingStyle,
+    //     languages,
+    //     prices,
+    //     selectedTimes,
+    //   ];
 
-      if (requiredFields.some((field) => !field)) {
-        return res.status(400).json({ error: "Please fill all fields" });
-      }
-    }
+    //   if (requiredFields.some((field) => !field)) {
+    //     return res.status(400).json({ error: "Please fill all fields" });
+    //   }
+    // }
 
     const profile = user.profileId
       
@@ -135,11 +135,11 @@ exports.createProfile = async (req, res) => {
 }
 };
 
-exports.getSingleProfileDetails = async (req, res) => {
+exports.getSingleProfileDetailsByUserId = async (req, res) => {
   try {
-    const profileId = req.params.profileId; 
+    const userId = req.params.userId; 
 
-    const profile = await Profile.findById(profileId);
+    const profile = await Profile.findOne({ userId: userId });
 
     if (!profile) {
       return res.status(404).json({ error: "Profile not found" });
@@ -153,6 +153,7 @@ exports.getSingleProfileDetails = async (req, res) => {
       .json({ error: "An error occurred while fetching the profile" });
   }
 };
+
 
 exports.getProfileById = async (req, res) => {
   try {

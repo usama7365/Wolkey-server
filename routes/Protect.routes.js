@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middlewares/verifyToken");
 const { DashboardController } = require("../controllers/dashboard");
-const {createProfile,getProfileById,deleteProfile,getAllProfiles,searchProfiles,rateProfile,getSingleProfileDetails,} = require("../controllers/profile.controller");
+const {createProfile,getProfileById,deleteProfile,getAllProfiles,searchProfiles,rateProfile,getSingleProfileDetails,getSingleProfileDetailsByUserId} = require("../controllers/profile.controller");
 const cityController = require("../controllers/city.controller");
 const { logout } = require("../controllers/logout.controller");
 const path = require("path");
@@ -60,14 +60,7 @@ router.post(
   createProfile
 );
 
-router.get("/view-profile", verifyToken, (req, res, next) => {
-  if (req.query.profileId) {
-    return res.redirect(`/view-profile/${req.query.profileId}`);
-  }
-  return getProfileById(req, res, next);
-});
-
-router.get("/view-profile/:profileId", verifyToken, getSingleProfileDetails);
+router.get("/view-profile/:userId", getSingleProfileDetailsByUserId);
 
 router.post("/rate-profile/:profileId", verifyToken, rateProfile);
 
