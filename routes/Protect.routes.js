@@ -74,4 +74,7 @@ router.delete("/delete-profile/:profileId", verifyToken, deleteProfile);
 
 router.get("/cities", cityController.getAllCities);
 
+router.get("/top-cities", cityController.getTopCities);
+
+
 module.exports = router;
