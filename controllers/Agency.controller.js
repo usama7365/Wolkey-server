@@ -84,21 +84,30 @@ const createOrUpdateAgencyProfile = async (req, res) => {
   }
 };
 
-const getAgencyProfileById = async (req, res) => {
+const getAgencyProfileByUserId = async (req, res) => {
   try {
-    const agencyProfileId = req.params.agencyProfileId;
+    const userId = req.params.userId;
     
-    const agencyProfile = await AgencyProfile.findById(agencyProfileId);
+    // Find the user by their ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Retrieve the agency profile associated with the user
+    const agencyProfile = await AgencyProfile.findOne({ userId: user._id });
 
     if (!agencyProfile) {
-      return res.status(404).json({ error: "Agency profile not found" });
+      return res.status(404).json({ error: "Agency profile not found for this user" });
     }
 
     res.status(200).json({ agencyProfile });
   } catch (error) {
-    console.error("Error fetching agency profile by ID:", error);
+    console.error("Error fetching agency profile by user ID:", error);
     res.status(500).json({ error: "An error occurred while fetching the agency profile" });
   }
 };
 
-module.exports = { createOrUpdateAgencyProfile, getAgencyProfileById };
+
+module.exports = { createOrUpdateAgencyProfile, getAgencyProfileByUserId };
