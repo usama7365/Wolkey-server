@@ -182,28 +182,42 @@ exports.searchProfiles = async (req, res) => {
   try {
     const { keywords } = req.query;
 
-    const regexKeywords = new RegExp(keywords, "i");
+    const regexKeywords = new RegExp(keywords, 'i');
 
     const profiles = await Profile.find({
       $or: [
+        { name: regexKeywords },
         { title: regexKeywords },
         { aboutUs: regexKeywords },
-        { name: regexKeywords },
+        { subjectName: regexKeywords },
+        { serviceNames: regexKeywords },
+        { Experience: regexKeywords },
+        { TeachingStyle: regexKeywords },
+        { gender: regexKeywords },
+        { age: regexKeywords },
+        { city: regexKeywords },
+        { languages: regexKeywords },
+        { specialityDegree: regexKeywords },
+        { Nationality: regexKeywords },
+        { education: regexKeywords },
+        { prices: { $elemMatch: { $regex: regexKeywords } } },
+        { availabilityMins: regexKeywords },
+        { selectedTimes: { $elemMatch: { $regex: regexKeywords } }},
+        { 'ratings.review': regexKeywords },
       ],
     });
 
     if (!profiles || profiles.length === 0) {
-      return res.status(404).json({ error: "No matching profiles found" });
+      return res.status(404).json({ error: 'No matching profiles found' });
     }
 
     res.status(200).json(profiles);
   } catch (error) {
-    console.error("Error searching profiles:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while searching profiles" });
+    console.error('Error searching profiles:', error);
+    res.status(500).json({ error: 'An error occurred while searching profiles' });
   }
 };
+
 
 exports.getAllProfiles = async (req, res) => {
   try {
