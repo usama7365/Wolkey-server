@@ -22,5 +22,9 @@ router.post('/post-video', verifyToken, upload.any('video'), videoController.pos
 
 router.get("/user-videos/:userId", videoController.getVideosByUserId);
 
+router.put("/increment-video-view/:videoId", videoController.incrementVideoView); 
+
+router.get('/trending-videos', videoController.getTrendingVideos); 
+
 
 module.exports = router;

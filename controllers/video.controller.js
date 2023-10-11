@@ -9,7 +9,7 @@ const uploadVideo = async (req, res) => {
   try {
 
 
-    // return res.json({ files: req.file });
+    // return res.json({ files: req.file }); 
 
     if (!req.file) {
       return res.status(400).json({ error: 'Please upload a video file' });

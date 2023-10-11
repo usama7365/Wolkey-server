@@ -12,6 +12,10 @@ const videoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    views: {
+      type: Number,
+      default: 0, // Initialize view count to 0
+    },
   },
   {
     collection: "ProfileVideo",

@@ -53,3 +53,41 @@ exports.getVideosByUserId = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching videos' });
   }
 };
+
+
+exports.incrementVideoView = async (req, res) => {
+  const { videoId } = req.params;
+
+  try {
+    // Find the video by ID
+    const video = await Video.findById(videoId);
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    // Increment the view count
+    video.views += 1;
+    await video.save();
+
+    res.status(200).json({ message: "Video view count incremented" });
+  } catch (error) {
+    console.error("Error incrementing video view count:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while incrementing the video view count" });
+  }
+};
+
+exports.getTrendingVideos = async (req, res) => {
+  try {
+    const trendingVideos = await Video.find()
+      .sort({ views: -1 }) // Sort videos in descending order of views
+      .limit(5); // Limit the result to the top 5 videos
+
+    res.status(200).json(trendingVideos);
+  } catch (error) {
+    console.error('Error fetching trending videos:', error);
+    res.status(500).json({ error: 'An error occurred while fetching trending videos' });
+  }
+};
