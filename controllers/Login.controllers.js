@@ -37,6 +37,7 @@ exports.PostLoginSchema = async (req, res) => {
     });
 
     res.status(200).json({
+      AgencyprofileId: user.AgencyprofileId,
       profileId: user.profileId,
       _id: user._id,
       name: user.displayName,

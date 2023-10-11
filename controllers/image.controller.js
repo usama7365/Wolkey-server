@@ -15,7 +15,7 @@ exports.postImage = async (req, res) => {
       return res.status(400).json({ error: "Please upload at least one image" });
     }
 
-    const imagePaths = req.files.map((file) => file.path.replace('public\\', ''));
+    const imagePaths = req.files.map((file) => `/uploads/images/${file.filename}`);
 
     // Create a separate post for each image
     for (const imagePath of imagePaths) {
@@ -33,41 +33,20 @@ exports.postImage = async (req, res) => {
 };
 
 
-exports.getUserImages = async (req, res) => {
-  const { userId } = req.user;
+  exports.getImagesByUserId = async (req, res) => {
+    const { userId } = req.params;
 
-  try {
-    const userImages = await Image.find({ userId });
-    res.status(200).json(userImages);
-  } catch (error) {
-    console.error('Error fetching user images:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user images' });
-  }
-};
+    try {
+      // Find images by user ID
+      const images = await Image.find({ userId });
 
+      if (!images) {
+        return res.status(404).json({ error: "No images found for the user" });
+      }
 
-exports.getAllUserImages = async (req, res) => {
-  const { userId } = req.user;
-
-  try {
-    const userImages = await Image.find({ userId });
-    const imagePaths = userImages.map((image) => image.imagePath.replace('public\\', ''));
-    res.status(200).json({ userImages, imagePaths });
-  } catch (error) {
-    console.error('Error fetching user images:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user images' });
-  }
-};
-
-exports.getUserGallery = async (req, res) => {
-  const { userId } = req.params;
-  console.log(userId, "idkjahdkau");
-
-  try {
-    const userImages = await Image.find({ userId });
-    res.status(200).json(userImages);
-  } catch (error) {
-    console.error('Error fetching user images:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user images' });
-  }
-};
+      res.status(200).json(images);
+    } catch (error) {
+      console.error("Error fetching images by user ID:", error);
+      res.status(500).json({ error: "An error occurred while fetching images" });
+    }
+  };

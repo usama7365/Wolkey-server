@@ -10,6 +10,12 @@ const agencyProfileSchema = new mongoose.Schema({
   city: String,
   streetName: String,
   houseNumber: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+
 });
 
 const AgencyProfile = mongoose.model("AgencyProfile", agencyProfileSchema);

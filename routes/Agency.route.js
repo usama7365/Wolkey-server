@@ -6,7 +6,7 @@ const agencyProfileController = require('../controllers/Agency.controller');
 
 router.post('/createOrUpdateAgencyProfile',verifyToken, agencyProfileController.createOrUpdateAgencyProfile);
 
-router.get("/getAgencyProfile/:agencyProfileId", verifyToken, agencyProfileController.getAgencyProfileById);
+router.get("/getAgencyProfileByUserId/:userId", verifyToken, agencyProfileController.getAgencyProfileByUserId);
 
 
 

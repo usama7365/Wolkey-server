@@ -16,7 +16,8 @@ exports.postVideo = async (req, res) => {
       return res.status(400).json({ error: "Please upload at least one video" });
     }
 
-    const videoPaths = req.files.map((file) => file.path.replace('public\\', ''));
+
+    const videoPaths = req.files.map((file) => `/uploads/videos/${file.filename}`);
 
     // Create a separate post for each video
     for (const videoPath of videoPaths) {
@@ -32,6 +33,7 @@ exports.postVideo = async (req, res) => {
       .json({ error: "An error occurred while uploading the videos" });
   }
 };
+
 
 exports.getVideosByUserId = async (req, res) => {
   const { userId } = req.params;
