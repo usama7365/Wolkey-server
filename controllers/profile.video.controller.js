@@ -73,7 +73,7 @@ exports.deleteVideoByUserId = async (req, res) => {
       return res.status(403).json({ error: "You don't have permission to delete this video" });
     }
 
-    // Delete the video
+    // Delete the video 
     await video.remove();
 
     res.status(200).json({ message: "Video deleted successfully" });
