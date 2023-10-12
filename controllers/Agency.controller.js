@@ -29,13 +29,20 @@ const createOrUpdateAgencyProfile = async (req, res) => {
 
       await existingProfile.save();
 
+      // Set the AgencyprofileId in the Users collection
+      const user = await User.findById(userId);
+      if (user) {
+        user.AgencyprofileId = existingProfile._id;
+        await user.save();
+      }
+
       res.status(200).json({
         message: "Agency profile updated successfully",
         profileId: existingProfile._id,
       });
     } else {
       const newAgencyProfile = new AgencyProfile({
-        userId, // Set the userId when creating a new profile
+        userId,
         kvkNumber,
         btwNumber,
         companyName,
@@ -49,6 +56,13 @@ const createOrUpdateAgencyProfile = async (req, res) => {
 
       await newAgencyProfile.save();
 
+      // Set the AgencyprofileId in the Users collection
+      const user = await User.findById(userId);
+      if (user) {
+        user.AgencyprofileId = newAgencyProfile._id;
+        await user.save();
+      }
+
       res.status(201).json({
         message: "Agency profile created successfully",
         AgencyprofileId: newAgencyProfile._id,
@@ -61,6 +75,7 @@ const createOrUpdateAgencyProfile = async (req, res) => {
       .json({ error: "An error occurred while creating/updating the agency profile" });
   }
 };
+
 
 
 const getAgencyProfileByUserId = async (req, res) => {
