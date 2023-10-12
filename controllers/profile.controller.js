@@ -194,7 +194,6 @@ exports.searchProfiles = async (req, res) => {
         { Experience: regexKeywords },
         { TeachingStyle: regexKeywords },
         { gender: regexKeywords },
-        { age: regexKeywords },
         { city: regexKeywords },
         { languages: regexKeywords },
         { specialityDegree: regexKeywords },
@@ -217,6 +216,7 @@ exports.searchProfiles = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while searching profiles' });
   }
 };
+
 
 
 exports.getAllProfiles = async (req, res) => {

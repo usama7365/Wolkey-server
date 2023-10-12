@@ -1,5 +1,7 @@
 const Image = require("../models/image model/image.model");
 const User = require("../models/users.model");
+const fs = require('fs'); // Required for file deletion
+const path = require('path');
 
 exports.postImage = async (req, res) => {
   const { userId } = req.user;
@@ -48,5 +50,39 @@ exports.postImage = async (req, res) => {
     } catch (error) {
       console.error("Error fetching images by user ID:", error);
       res.status(500).json({ error: "An error occurred while fetching images" });
+    }
+  };
+
+
+  exports.deleteImageByUserId = async (req, res) => {
+    const { userId } = req.user; 
+    const { imageId } = req.params; 
+  
+    try {
+      // Find the image by its ID
+      const image = await Image.findOne({ _id: imageId });
+  
+      if (!image) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+  
+
+      if (image.userId.toString() !== userId) {
+        return res.status(403).json({ error: "You do not have permission to delete this image" });
+      }
+  
+      fs.unlink(path.join('public', image.imagePath), async (err) => {
+        if (err) {
+          console.error("Error deleting image file:", err);
+          return res.status(500).json({ error: "An error occurred while deleting the image" });
+        }
+  
+        // Delete the image from the database
+        await image.remove();
+        res.status(204).send();
+      });
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      res.status(500).json({ error: "An error occurred while deleting the image" });
     }
   };

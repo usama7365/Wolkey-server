@@ -55,6 +55,35 @@ exports.getVideosByUserId = async (req, res) => {
 };
 
 
+
+exports.deleteVideoByUserId = async (req, res) => {
+  const { videoId } = req.params;
+  const { userId } = req.user;
+
+  try {
+    // Find the video by ID
+    const video = await Video.findById(videoId);
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    // Check if the user has permission to delete the video
+    if (video.userId.toString() !== userId) {
+      return res.status(403).json({ error: "You don't have permission to delete this video" });
+    }
+
+    // Delete the video
+    await video.remove();
+
+    res.status(200).json({ message: "Video deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting video:", error);
+    res.status(500).json({ error: "An error occurred while deleting the video" });
+  }
+};
+
+
 exports.incrementVideoView = async (req, res) => {
   const { videoId } = req.params;
 

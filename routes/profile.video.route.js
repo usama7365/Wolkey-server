@@ -27,4 +27,7 @@ router.put("/increment-video-view/:videoId", videoController.incrementVideoView)
 router.get('/trending-videos', videoController.getTrendingVideos); 
 
 
+router.delete('/delete-video/:videoId', verifyToken, videoController.deleteVideoByUserId);
+
+
 module.exports = router;

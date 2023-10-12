@@ -25,6 +25,7 @@ router.post('/post-image', verifyToken, upload.any('image'), imageController.pos
 
 router.get('/user-images/:userId', imageController.getImagesByUserId);
 
+router.delete('/delete-image/:imageId', verifyToken, imageController.deleteImageByUserId);
 
 
 module.exports = router;

@@ -19,18 +19,13 @@ const createOrUpdateAgencyProfile = async (req, res) => {
       return res.status(400).json({ error: "Company Name is required" });
     }
 
-    const existingProfile = await AgencyProfile.findOne({ companyName });
+    const { userId } = req.user; // Get the user ID from the request
+
+    const existingProfile = await AgencyProfile.findOne({ userId });
 
     if (existingProfile) {
       // Agency profile already exists, update the existing profile
-      existingProfile.kvkNumber = kvkNumber;
-      existingProfile.btwNumber = btwNumber;
-      existingProfile.contact = contact;
-      existingProfile.PhoneNumber = PhoneNumber;
-      existingProfile.zipCode = zipCode;
-      existingProfile.city = city;
-      existingProfile.streetName = streetName;
-      existingProfile.houseNumber = houseNumber;
+      // ...
 
       await existingProfile.save();
 
@@ -38,19 +33,9 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         message: "Agency profile updated successfully",
         profileId: existingProfile._id,
       });
-
-      const { userId } = req.user;
-      console.log("User ID:", userId);
-
-      const user = await User.findById(userId);
-      console.log("User Object:", user);
-
-      if (user) {
-        user.AgencyprofileId = existingProfile._id;
-        await user.save();
-      }
     } else {
       const newAgencyProfile = new AgencyProfile({
+        userId, // Set the userId when creating a new profile
         kvkNumber,
         btwNumber,
         companyName,
@@ -68,13 +53,6 @@ const createOrUpdateAgencyProfile = async (req, res) => {
         message: "Agency profile created successfully",
         AgencyprofileId: newAgencyProfile._id,
       });
-
-      const { userId } = req.user;
-      const user = await User.findById(userId);
-      if (user) {
-        user.AgencyprofileId = newAgencyProfile._id;
-        await user.save();
-      }
     }
   } catch (error) {
     console.error("Error creating/updating agency profile:", error);
@@ -83,6 +61,7 @@ const createOrUpdateAgencyProfile = async (req, res) => {
       .json({ error: "An error occurred while creating/updating the agency profile" });
   }
 };
+
 
 const getAgencyProfileByUserId = async (req, res) => {
   try {
