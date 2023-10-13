@@ -181,28 +181,39 @@ exports.getProfileById = async (req, res) => {
 exports.searchProfiles = async (req, res) => {
   try {
     const { keywords } = req.query;
+    // Ensure keywords is an array
+    const keywordArray = Array.isArray(keywords) ? keywords : [keywords];
 
-    const regexKeywords = new RegExp(keywords, 'i');
+    // Create an array of regular expressions for each keyword
+    const regexKeywords = keywordArray.map(keyword => new RegExp(keyword, 'i'));
 
     const profiles = await Profile.find({
       $or: [
-        { name: regexKeywords },
-        { title: regexKeywords },
-        { aboutUs: regexKeywords },
-        { subjectName: regexKeywords },
-        { serviceNames: regexKeywords },
-        { Experience: regexKeywords },
-        { TeachingStyle: regexKeywords },
-        { gender: regexKeywords },
-        { city: regexKeywords },
-        { languages: regexKeywords },
-        { specialityDegree: regexKeywords },
-        { Nationality: regexKeywords },
-        { education: regexKeywords },
-        { prices: { $elemMatch: { $regex: regexKeywords } } },
-        { availabilityMins: regexKeywords },
-        { selectedTimes: { $elemMatch: { $regex: regexKeywords } }},
-        { 'ratings.review': regexKeywords },
+        { name: { $in: regexKeywords } },
+        { title: { $in: regexKeywords } },
+        { aboutUs: { $in: regexKeywords } },
+        { subjectName: { $in: regexKeywords } },
+        { serviceNames: { $in: regexKeywords } },
+        { Experience: { $in: regexKeywords } },
+        { TeachingStyle: { $in: regexKeywords } },
+        { gender: { $in: regexKeywords } },
+        { city: { $in: regexKeywords } },
+        { languages: { $in: regexKeywords } },
+        { specialityDegree: { $in: regexKeywords } },
+        { Nationality: { $in: regexKeywords } },
+        { education: { $in: regexKeywords } },
+        {
+          prices: {
+            $elemMatch: { $in: regexKeywords },
+          },
+        },
+        { availabilityMins: { $in: regexKeywords } },
+        {
+          selectedTimes: {
+            $elemMatch: { $in: regexKeywords },
+          },
+        },
+        { 'ratings.review': { $in: regexKeywords } },
       ],
     });
 
@@ -216,6 +227,7 @@ exports.searchProfiles = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while searching profiles' });
   }
 };
+
 
 
 
