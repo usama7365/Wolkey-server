@@ -181,9 +181,10 @@ exports.getProfileById = async (req, res) => {
 exports.searchProfiles = async (req, res) => {
   try {
     const { keywords } = req.query;
+    
     // Ensure keywords is an array
     const keywordArray = Array.isArray(keywords) ? keywords : [keywords];
-
+    
     // Create an array of regular expressions for each keyword
     const regexKeywords = keywordArray.map(keyword => new RegExp(keyword, 'i'));
 
@@ -356,4 +357,3 @@ exports.filterProfiles = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while filtering profiles' });
   }
 };
-
