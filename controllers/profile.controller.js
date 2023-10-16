@@ -189,7 +189,7 @@ exports.searchProfiles = async (req, res) => {
         { name: { $in: regexKeywords } },
         { title: { $in: regexKeywords } },
         { aboutUs: { $in: regexKeywords } },
-        { subjectName: { $in: regexKeywords } },
+        { subjectName: { $in: regexKeywords } }, 
         { serviceNames: { $in: regexKeywords } },
         { Experience: { $in: regexKeywords } },
         { TeachingStyle: { $in: regexKeywords } },

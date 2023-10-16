@@ -1,4 +1,5 @@
 const AgencyProfile = require('../models/agency.profile.model');
+const AgencyProfileImage = require('../models/agency.profileImage')
 const User = require('../models/users.model');
 
 const createOrUpdateAgencyProfile = async (req, res) => {
@@ -103,5 +104,68 @@ const getAgencyProfileByUserId = async (req, res) => {
   }
 };
 
+const uploadAgencyProfileImage = async (req, res) => {
+  const { userId } = req.user;
 
-module.exports = { createOrUpdateAgencyProfile, getAgencyProfileByUserId };
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check if there are any uploaded files
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "Please upload at least one image" });
+    }
+
+    // Get the existing image for the user, if any
+    const existingImage = await AgencyProfileImage.findOne({ userId });
+
+    if (existingImage) {
+      // If an image already exists, delete it from the server
+      const existingImagePath = path.join(__dirname, '..', existingImage.AgencyProfileImagePath);
+      if (fs.existsSync(existingImagePath)) {
+        fs.unlinkSync(existingImagePath);
+      }
+
+      // Update the existing image with the new one
+      existingImage.AgencyProfileImagePath = `/uploads/images/${req.files[0].filename}`;
+      await existingImage.save();
+      res.status(200).json({ message: "Image replaced successfully" });
+    } else {
+      // Create a new image record
+      const image = new AgencyProfileImage({
+        userId,
+        AgencyProfileImagePath: `/uploads/images/${req.files[0].filename}`,
+      });
+      await image.save();
+      res.status(201).json({ message: "Image uploaded successfully" });
+    }
+  } catch (error) {
+    console.error("Error uploading/replacing image:", error);
+    res.status(500).json({ error: "An error occurred while uploading/replacing the image" });
+  }
+};
+
+
+
+
+const getImagesByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Find images by user ID
+    const images = await AgencyProfileImage.find({ userId });
+
+    if (!images) {
+      return res.status(404).json({ error: "No images found for the user" });
+    }
+
+    res.status(200).json(images);
+  } catch (error) {
+    console.error("Error fetching images by user ID:", error);
+    res.status(500).json({ error: "An error occurred while fetching images" });
+  }
+};
+
+module.exports = { createOrUpdateAgencyProfile, getAgencyProfileByUserId , uploadAgencyProfileImage, getImagesByUserId};
