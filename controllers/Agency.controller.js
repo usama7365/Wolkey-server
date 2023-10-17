@@ -147,9 +147,6 @@ const uploadAgencyProfileImage = async (req, res) => {
   }
 };
 
-
-
-
 const getImagesByUserId = async (req, res) => {
   const { userId } = req.params;
 

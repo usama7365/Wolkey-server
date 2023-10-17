@@ -4,8 +4,8 @@ const Video = require('../models/video.model');
 // Controller to handle video upload
 const uploadVideo = async (req, res) => {
 
-    console.log(req.body, "body"); // Log the request body
-    console.log(req.file, "File"); // Log the uploaded file information
+    console.log(req.body, "body");
+    console.log(req.file, "File"); 
   try {
 
 
@@ -37,23 +37,25 @@ const uploadVideo = async (req, res) => {
   }
 };
 
-// Controller to increment video views
 const incrementVideoViews = async (req, res) => {
   try {
     const { videoId } = req.params;
+    const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; 
 
-    // Find the video by its ID
     const video = await Video.findById(videoId);
 
     if (!video) {
       return res.status(404).json({ error: 'Video not found' });
     }
 
-    // Increment the views count
-    video.views += 1;
+    if (video.lastViewedIP !== clientIP) {
 
-    // Save the updated video document
-    await video.save();
+      video.views += 1;
+
+      video.lastViewedIP = clientIP;
+
+      await video.save();
+    }
 
     res.status(200).json({ message: 'Video views incremented', views: video.views });
   } catch (error) {
@@ -61,6 +63,7 @@ const incrementVideoViews = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while incrementing views' });
   }
 };
+
 
 
 const getAllVideos = async (req, res) => {
