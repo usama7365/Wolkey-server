@@ -80,13 +80,14 @@ exports.deleteVideoByUserId = async (req, res) => {
   } catch (error) {
     console.error("Error deleting video:", error);
     res.status(500).json({ error: "An error occurred while deleting the video" });
-  }
+  } 
 };
 
 
 exports.incrementVideoView = async (req, res) => {
   const { videoId } = req.params;
   const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log('Client IP:', clientIP);
 
   try {
     // Find the video by ID
