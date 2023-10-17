@@ -181,8 +181,17 @@ exports.getProfileById = async (req, res) => {
 exports.searchProfiles = async (req, res) => {
   try {
     const { keywords } = req.query;
+<<<<<<< HEAD
 
     const regexKeywords = new RegExp(keywords, 'i');
+=======
+    
+    // Ensure keywords is an array
+    const keywordArray = Array.isArray(keywords) ? keywords : [keywords];
+    
+    // Create an array of regular expressions for each keyword
+    const regexKeywords = keywordArray.map(keyword => new RegExp(keyword, 'i'));
+>>>>>>> abf3c09733ed0165046b01450eccb568bf1524c4
 
     const profiles = await Profile.find({
       $or: [
