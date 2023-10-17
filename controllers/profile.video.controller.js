@@ -86,8 +86,7 @@ exports.deleteVideoByUserId = async (req, res) => {
 
 exports.incrementVideoView = async (req, res) => {
   const { videoId } = req.params;
-  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log('Client IP:', clientIP);
+  const clientIP = req.body.clientIP; 
 
   try {
     // Find the video by ID
