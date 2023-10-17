@@ -14,7 +14,11 @@ const videoSchema = new mongoose.Schema(
     },
     views: {
       type: Number,
-      default: 0, // Initialize view count to 0
+      default: 0,
+    },
+    viewedByIP: {
+      type: [String],
+      default: [],
     },
   },
   {

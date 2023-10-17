@@ -86,25 +86,34 @@ exports.deleteVideoByUserId = async (req, res) => {
 
 exports.incrementVideoView = async (req, res) => {
   const { videoId } = req.params;
+  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   try {
     // Find the video by ID
     const video = await Video.findById(videoId);
 
     if (!video) {
-      return res.status(404).json({ error: "Video not found" });
+      return res.status(404).json({ error: 'Video not found' });
+    }
+
+    // Check if the user's IP has already viewed this video
+    if (video.viewedByIP.includes(clientIP)) {
+      return res.status(400).json({ error: 'You have already viewed this video' });
     }
 
     // Increment the view count
     video.views += 1;
+    // Add the user's IP to the list of viewed IPs
+    video.viewedByIP.push(clientIP);
+
     await video.save();
 
-    res.status(200).json({ message: "Video view count incremented" });
+    res.status(200).json({ message: 'Video view count incremented' });
   } catch (error) {
-    console.error("Error incrementing video view count:", error);
+    console.error('Error incrementing video view count:', error);
     res
       .status(500)
-      .json({ error: "An error occurred while incrementing the video view count" });
+      .json({ error: 'An error occurred while incrementing the video view count' });
   }
 };
 
