@@ -11,7 +11,6 @@ exports.postVideo = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Check if there are any uploaded video files
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "Please upload at least one video" });
     }
@@ -19,7 +18,6 @@ exports.postVideo = async (req, res) => {
 
     const videoPaths = req.files.map((file) => `/uploads/videos/${file.filename}`);
 
-    // Create a separate post for each video
     for (const videoPath of videoPaths) {
       const video = new Video({ userId, videoPath });
       await video.save();
@@ -39,14 +37,14 @@ exports.getVideosByUserId = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    // Find all videos associated with the specified user ID
+
     const videos = await Video.find({ userId });
 
     if (!videos) {
       return res.status(404).json({ error: 'No videos found for this user' });
     }
 
-    // Return the list of videos
+
     res.status(200).json(videos);
   } catch (error) {
     console.error('Error fetching videos:', error);
@@ -61,19 +59,19 @@ exports.deleteVideoByUserId = async (req, res) => {
   const { userId } = req.user;
 
   try {
-    // Find the video by ID
+
     const video = await Video.findById(videoId);
 
     if (!video) {
       return res.status(404).json({ error: "Video not found" });
     }
 
-    // Check if the user has permission to delete the video
+
     if (video.userId.toString() !== userId) {
       return res.status(403).json({ error: "You don't have permission to delete this video" });
     }
 
-    // Delete the video 
+
     await video.remove();
 
     res.status(200).json({ message: "Video deleted successfully" });
@@ -89,21 +87,18 @@ exports.incrementVideoView = async (req, res) => {
   const clientIP = req.body.clientIP; 
 
   try {
-    // Find the video by ID
+      
     const video = await Video.findById(videoId);
 
     if (!video) {
       return res.status(404).json({ error: 'Video not found' });
     }
 
-    // Check if the user's IP has already viewed this video
     if (video.viewedByIP.includes(clientIP)) {
       return res.status(400).json({ error: 'You have already viewed this video' });
     }
 
-    // Increment the view count
     video.views += 1;
-    // Add the user's IP to the list of viewed IPs
     video.viewedByIP.push(clientIP);
 
     await video.save();
@@ -120,8 +115,8 @@ exports.incrementVideoView = async (req, res) => {
 exports.getTrendingVideos = async (req, res) => {
   try {
     const trendingVideos = await Video.find()
-      .sort({ views: -1 }) // Sort videos in descending order of views
-      .limit(5); // Limit the result to the top 5 videos
+      .sort({ views: -1 }) 
+      .limit(5);
 
     res.status(200).json(trendingVideos);
   } catch (error) {
