@@ -5,6 +5,7 @@
 	"main": "app.js",
 	"scripts": {
 		"server": "nodemon app.js",
+		"start":"node app.js",
 		"client": "npm run dev --prefix client-vue",
 		"dev": "concurrently \"npm run server\" \"npm run client\""
 	},
