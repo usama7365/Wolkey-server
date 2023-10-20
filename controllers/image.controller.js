@@ -55,18 +55,16 @@ exports.postImage = async (req, res) => {
 
 
   exports.deleteImageByUserId = async (req, res) => {
-    const { userId } = req.user; 
-    const { imageId } = req.params; 
+    const { userId } = req.user;
+    const { imageId } = req.params;
   
     try {
-      // Find the image by its ID
       const image = await Image.findOne({ _id: imageId });
   
       if (!image) {
         return res.status(404).json({ error: "Image not found" });
       }
   
-
       if (image.userId.toString() !== userId) {
         return res.status(403).json({ error: "You do not have permission to delete this image" });
       }
@@ -77,12 +75,14 @@ exports.postImage = async (req, res) => {
           return res.status(500).json({ error: "An error occurred while deleting the image" });
         }
   
-        // Delete the image from the database
-        await image.remove();
-        res.status(204).send();
+        // Use deleteOne to delete the image from the database
+        await Image.deleteOne({ _id: imageId });
+  
+        res.status(200).json({ message: "image deleted successfully" });
       });
     } catch (error) {
       console.error("Error deleting image:", error);
       res.status(500).json({ error: "An error occurred while deleting the image" });
     }
   };
+  

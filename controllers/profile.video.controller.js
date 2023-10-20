@@ -1,6 +1,8 @@
 // controllers/video.controller.js
 const Video = require("../models/profile videos/video.model");
 const User = require("../models/users.model");
+const fs = require('fs'); 
+const path = require('path');
 
 exports.postVideo = async (req, res) => {
   const { userId } = req.user;
@@ -55,8 +57,8 @@ exports.getVideosByUserId = async (req, res) => {
 
 
 exports.deleteVideoByUserId = async (req, res) => {
-  const { videoId } = req.params;
   const { userId } = req.user;
+  const { videoId } = req.params;
 
   try {
 
@@ -71,10 +73,18 @@ exports.deleteVideoByUserId = async (req, res) => {
       return res.status(403).json({ error: "You don't have permission to delete this video" });
     }
 
+    fs.unlink(path.join('public', video.videoPath), async (err) => {
+      if (err) {
+        console.error("Error deleting image file:", err);
+        return res.status(500).json({ error: "An error occurred while deleting the videoPath" });
+      }
 
-    await video.remove();
+
+    
+    await Video.deleteOne({ _id: videoId });
 
     res.status(200).json({ message: "Video deleted successfully" });
+  });
   } catch (error) {
     console.error("Error deleting video:", error);
     res.status(500).json({ error: "An error occurred while deleting the video" });
